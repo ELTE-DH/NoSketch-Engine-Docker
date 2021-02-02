@@ -1,0 +1,66 @@
+MAINTAINER "your@yourdomain.com"
+INFO "Susanne"
+NAME "Susanne"
+PATH susanne
+ENCODING "UTF-8"
+LANGUAGE "English"
+
+PATH   '/home/corpora/susanne/indexed/'
+VERTICAL  '/home/corpora/susanne/vertical/source'
+
+
+INFOHREF "http://www.grsampson.net/Resources.html"
+TAGSETDOC "http://books.google.cz/books/about/English_for_the_Computer.html?id=odFt5ZHBri4C"
+
+FULLREF "doc.file,doc.n"
+
+ATTRIBUTE   word
+
+ATTRIBUTE   lemma
+
+ATTRIBUTE   tag
+
+ATTRIBUTE   status
+
+ATTRIBUTE   lc {
+	LABEL	"word (lowercase)"
+	DYNAMIC  utf8lowercase
+	DYNLIB   internal
+	ARG1     "C"
+	FUNTYPE  s
+	FROMATTR word
+	TYPE     index
+	TRANSQUERY	yes
+}
+
+ATTRIBUTE   lemma_lc {
+	LABEL	"lemma (lowercase)"
+	DYNAMIC  utf8lowercase
+	DYNLIB   internal
+	ARG1     "C"
+	FUNTYPE  s
+	FROMATTR lemma
+	TYPE     index
+	TRANSQUERY	yes
+}
+
+STRUCTURE doc {
+	ATTRIBUTE file
+    ATTRIBUTE wordcount
+	ATTRIBUTE n
+}
+
+STRUCTURE font {
+	ATTRIBUTE type
+}
+
+STRUCTURE head {
+	ATTRIBUTE type
+}
+
+STRUCTURE p
+
+STRUCTURE g {
+   DISPLAYTAG 0
+   DISPLAYBEGIN "_EMPTY_"
+}

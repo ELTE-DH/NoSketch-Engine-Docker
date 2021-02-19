@@ -39,6 +39,7 @@ RUN rm -rf /tmp/noske_files
 
 # Copy Apache config
 COPY conf/000-default.conf /etc/apache2/sites-enabled/
+COPY conf/htpasswd /var/lib/bonito/htpasswd
 RUN rm /var/www/bonito/.htaccess && sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' /var/www/crystal/config.js
 
 # Copy entrypoint file and patched run.cgi
@@ -54,7 +55,7 @@ COPY data/registry /home/registry
 # Compile corpora, fail on error
 RUN for CORP_FILE in /home/registry/*; do \
         echo "Running: encodevert -xrvc ${CORP_FILE}"; \
-        encodevert -xrvc ${CORP_FILE} || exit $?; \
+        compilecorp --no-ske ${CORP_FILE} || exit $?; \
     done
 
 # Start the container

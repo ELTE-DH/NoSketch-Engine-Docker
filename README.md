@@ -14,9 +14,10 @@ This docker image is based on Debian stable with some additional hacks for conve
 
 1. Put vert file in: data/corpora/CORPUS_NAME/vertical (see example in data/corpora/susanne/vertical)
 2. Put config in: data/registry/CORPUS_NAME (see example in data/registry/susanne)
-3. `docker build . -t nosketch_engine`
-4. `docker run -p80:80 nosketch_engine`
-5. Navigate to http://DOMAIN/crystal/ to use
+3. (Optional: password authentication) Uncomment relevant config lines in conf/000-default.conf and set user and password in conf/htpasswd   
+4. `docker build . -t nosketch_engine`
+5. `docker run -p80:80 nosketch_engine`
+6. Navigate to http://DOMAIN/crystal/ to use
 
 ## CLI Usage
 
@@ -25,7 +26,7 @@ This docker image is based on Debian stable with some additional hacks for conve
 
 ## Demo on Dockerhub
 
-The docker image with the sample corpus included is available on dockerhub:
+The docker image with the sample corpus included is [available on dockerhub](https://hub.docker.com/r/eltedh/nosketch-engine):
 
 ```bash
 docker pull eltedh/nosketch-engine

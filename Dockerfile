@@ -5,7 +5,8 @@ FROM debian:buster-slim
 RUN apt-get update && apt-get upgrade -y
 
 # Install NoSketchEngine dependencies
-RUN apt-get install -y build-essential swig libpcre++-dev python-dev libsass-dev libltdl-dev python-pip python-cheetah python-setuptools python-simplejson apache2
+RUN apt-get install -y build-essential swig libpcre++-dev python-dev libsass-dev libltdl-dev python-pip python-cheetah \
+ python-setuptools python-simplejson apache2
 
 # Install packages available only though pip
 RUN pip install signalfd
@@ -17,44 +18,52 @@ RUN a2enmod cgi
 COPY noske_files/ /tmp/noske_files
 
 # Install NoSketch Engine pkgs
-# Manatee 
-RUN pwd && tar xf /tmp/noske_files/manatee-open-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/manatee-open-* && ./configure PYTHON=python2 --with-pcre && make && make install && ldconfig
+## Manatee
+RUN pwd && tar xf /tmp/noske_files/manatee-open-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/manatee-open-* && \
+ ./configure PYTHON=python2 --with-pcre && make && make install && ldconfig
 
-# Bonito
-RUN tar xf /tmp/noske_files/bonito-open-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/bonito-open-* && ./configure && make && make install && ./setupbonito /var/www/bonito /var/lib/bonito && chown -R www-data:www-data /var/lib/bonito
+## Bonito
+### HACK1 patch conccgi.py to handle large corpora
+RUN tar xf /tmp/noske_files/bonito-open-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/bonito-open-* && \
+ ./configure && make && make install && ./setupbonito /var/www/bonito /var/lib/bonito && \
+ chown -R www-data:www-data /var/lib/bonito && \
+ sed -i 's#wtr = int(words) / float(tokens)#wtr = float(words) / float(tokens)#' \
+ /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
 
-# GDEX
+## GDEX
 RUN tar xf /tmp/noske_files/gdex-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/gdex-* && python2 setup.py install
 
-# Crystal
-# HACK1 Modify shell in Makefile to bash to handle bashism
-# HACK2 add user and chown node_modules directory for node-sass build
+## Crystal
+### HACK2 Modify shell in Makefile to bash to handle bashism
+### HACK3 add user and chown node_modules directory for node-sass build
+### HACK4 modify URL_BONITO to be set dynamically to the request domain in every request
 RUN tar xf /tmp/noske_files/crystal-open-*.tar.gz -C /tmp/noske_files && cd /tmp/noske_files/crystal-open-*/ && \
  sed  -i '1i SHELL:=/bin/bash' Makefile && \
- useradd corpora && mkdir /home/corpora && chown -R corpora:corpora /home/corpora /tmp/noske_files/crystal-open-*/ && su -l corpora -c "make -C /tmp/noske_files/crystal-open-*/" && \
- make install
+ useradd corpora && mkdir /home/corpora && chown -R corpora:corpora /home/corpora /tmp/noske_files/crystal-open-*/ && \
+ su -l corpora -c "make -C /tmp/noske_files/crystal-open-*/" && \
+ make install && \
+ sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
+ /var/www/crystal/config.js
 
-# Clean Up
-RUN rm -rf /tmp/noske_files
-
-# Copy Apache config
-COPY conf/000-default.conf /etc/apache2/sites-enabled/
-COPY conf/htpasswd /var/lib/bonito/htpasswd
-RUN rm /var/www/bonito/.htaccess && sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' /var/www/crystal/config.js
-
-# Copy entrypoint file and patched run.cgi
-COPY conf/entrypoint.sh /usr/local/bin/
-COPY conf/run.cgi /var/www/bonito/
+# Copy configs and clean up
+## 1. Copy Apache config, entrypoint file and patched run.cgi
+## 2. Clean up
+COPY conf/ /tmp/conf
+RUN mv /tmp/conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf && \
+ mv /tmp/conf/htpasswd /var/lib/bonito/htpasswd && \
+ cp /tmp/conf/entrypoint.sh /usr/local/bin/ && cp /tmp/conf/run.cgi /var/www/bonito/ && \
+ rm /var/www/bonito/.htaccess && \
+ rm -rf /tmp/noske_files /tmp/conf
 
 # Place corpora
-RUN mkdir -p /home/corpora
-COPY data/corpora /home/corpora
-RUN mkdir /home/registry
-COPY data/registry /home/registry
+COPY data /tmp/data
+RUN mv /tmp/data/corpora/* /home/corpora/ && mv /tmp/data/registry /home/registry && rm -rf /tmp/data && \
+ ln -s /home/corpora /corpora
+
 
 # Compile corpora, fail on error
 RUN for CORP_FILE in /home/registry/*; do \
-        echo "Running: encodevert -xrvc ${CORP_FILE}"; \
+        echo "Running: compilecorp --no-ske ${CORP_FILE}"; \
         compilecorp --no-ske ${CORP_FILE} || exit $?; \
     done
 

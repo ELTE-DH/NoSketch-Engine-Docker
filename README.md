@@ -30,7 +30,7 @@ The docker image with the sample corpus included is [available on dockerhub](htt
 
 ```bash
 docker pull eltedh/nosketch-engine
-docker run -p80:80 nosketch_engine
+docker run -p80:80 eltedh/nosketch-engine
 ```
 
 # License

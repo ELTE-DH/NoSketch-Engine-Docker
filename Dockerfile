@@ -58,7 +58,7 @@ RUN mv /tmp/conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf &&
 # Place corpora
 COPY data /tmp/data
 RUN mv /tmp/data/corpora/* /home/corpora/ && mv /tmp/data/registry /home/registry && rm -rf /tmp/data && \
- ln -s /home/corpora /corpora
+ ln -s /home /corpora
 
 
 # Compile corpora, fail on error

@@ -1,0 +1,58 @@
+MAINTAINER "sass.balint@nytud.hu"
+INFO "emagyardemo"
+NAME "A tiny e-magyar-analysed Hungarian corpus for demo"
+PATH emagyardemo
+ENCODING "UTF-8"
+LANGUAGE "Hungarian"
+
+PATH   '/home/corpora/emagyardemo/indexed/'
+VERTICAL  '/home/corpora/emagyardemo/vertical/source'
+
+INFOHREF "XXX"
+TAGSETDOC "XXX"
+
+FULLREF "doc.file,doc.n"
+
+ATTRIBUTE word
+ATTRIBUTE wsafter
+ATTRIBUTE anas
+ATTRIBUTE lemma
+ATTRIBUTE xpostag
+ATTRIBUTE upostag
+ATTRIBUTE feats
+ATTRIBUTE id
+ATTRIBUTE deprel
+ATTRIBUTE head
+ATTRIBUTE npbio
+ATTRIBUTE nerbio
+
+ATTRIBUTE lc {
+  LABEL      "word:lowercase"
+  DYNAMIC    utf8lowercase
+  DYNLIB     internal
+  ARG1       "C"
+  FUNTYPE    s
+  FROMATTR   word
+  TYPE       index
+  TRANSQUERY yes
+}
+
+ATTRIBUTE lemma_lc {
+  LABEL      "lemma:lowercase"
+  DYNAMIC    utf8lowercase
+  DYNLIB     internal
+  ARG1       "C"
+  FUNTYPE    s
+  FROMATTR   lemma
+  TYPE       index
+  TRANSQUERY yes
+}
+
+STRUCTURE doc {
+  ATTRIBUTE file
+  ATTRIBUTE wordcount
+  ATTRIBUTE n
+}
+
+STRUCTURE s
+

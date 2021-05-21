@@ -9,14 +9,17 @@ This docker image is based on Debian stable with some additional hacks for conve
 - Easy to add corpora (just add vertical file and registry file to he appropriate location and rebuild the docker)
 - CLI commands can be used directly (outside of the docker image)
 - Works on any domain without changing configuration
+- Two example corpora included: `susanne` (original NoSkE sample corpus) and `emagyardemo`.
+
+[Further info](data/corpora/emagyardemo/vertical/README.md) on how to create an [e-magyar](https://github.com/nytud/emtsv)-analysed corpus from plain `txt` and put in the system.
 
 ## Usage
 
-1. Put vert file in: `data/corpora/CORPUS_NAME/vertical` (see example in `data/corpora/susanne/vertical`)
-2. Put config in: `data/registry/CORPUS_NAME` (see example in `data/registry/susanne`)
+1. Put vert file in: `data/corpora/CORPUS_NAME/vertical` (see example in `data/corpora/*/vertical`)
+2. Put config in: `data/registry/CORPUS_NAME` (see example in `data/registry/*`)
 3. (Optional: password authentication) Uncomment relevant config lines in `conf/000-default.conf` and set user and password in `conf/htpasswd`   
 4. `docker build . -t nosketch_engine` (can run for 5 minutes or something)
-5. `docker run -p80:80 nosketch_engine`
+5. `docker run --rm --name noske -p80:80 nosketch_engine`
 6. Navigate to http://DOMAIN/crystal/ to use
 
 ## CLI Usage
@@ -30,7 +33,7 @@ The docker image with the sample corpus included is [available on dockerhub](htt
 
 ```bash
 docker pull eltedh/nosketch-engine
-docker run -p80:80 eltedh/nosketch-engine
+docker run --rm --name noske -p80:80 eltedh/nosketch-engine
 ```
 
 # License

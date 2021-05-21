@@ -9,7 +9,7 @@ PATH   '/home/corpora/emagyardemo/indexed/'
 VERTICAL  '/home/corpora/emagyardemo/vertical/source'
 
 INFOHREF "XXX"
-TAGSETDOC "XXX"
+TAGSETDOC "http://e-magyar.hu/hu/textmodules/emmorph_codelist"
 
 FULLREF "doc.file,doc.n"
 

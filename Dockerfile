@@ -56,16 +56,18 @@ RUN mv /tmp/conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf &&
  rm -rf /tmp/noske_files /tmp/conf
 
 # Place corpora
-COPY data /tmp/data
-RUN mv /tmp/data/corpora/* /home/corpora/ && mv /tmp/data/registry /home/registry && rm -rf /tmp/data && \
- ln -s /home/corpora /corpora && ln -s /home/registry /home/corpora/registry
+COPY data /data
+RUN ln -s /data/registry /data/corpora/registry
+# COPY data /tmp/data
+# RUN mv /tmp/data/corpora/* /home/corpora/ && mv /tmp/data/registry /home/registry && rm -rf /tmp/data && \
+#  ln -s /home/corpora /corpora && ln -s /home/registry /home/corpora/registry
 
 
-# Compile corpora, fail on error
-RUN for CORP_FILE in /home/registry/*; do \
-        echo "Running: compilecorp --no-ske ${CORP_FILE}"; \
-        compilecorp --no-ske ${CORP_FILE} || exit $?; \
-    done
+# # Compile corpora, fail on error
+# RUN for CORP_FILE in /data/registry/*; do \
+#         echo "Running: compilecorp --no-ske ${CORP_FILE}"; \
+#         compilecorp --no-ske ${CORP_FILE} || exit $?; \
+#     done
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

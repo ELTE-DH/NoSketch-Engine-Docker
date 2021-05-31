@@ -51,7 +51,7 @@ RUN tar xf /tmp/noske_files/crystal-open-*.tar.gz -C /tmp/noske_files && cd /tmp
 COPY conf/ /tmp/conf
 RUN mv /tmp/conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf && \
  mv /tmp/conf/htpasswd /var/lib/bonito/htpasswd && \
- cp /tmp/conf/entrypoint.sh /usr/local/bin/ && cp /tmp/conf/run.cgi /var/www/bonito/ && \
+ cp /tmp/conf/*.sh /usr/local/bin/ && cp /tmp/conf/run.cgi /var/www/bonito/ && \
  rm /var/www/bonito/.htaccess && \
  rm -rf /tmp/noske_files /tmp/conf
 

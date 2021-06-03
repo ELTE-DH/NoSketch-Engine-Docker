@@ -15,6 +15,7 @@ build:
 run:
 	@make -s stop
 	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/data,dst=/data noske
+	@echo 'URL: http://localhost:10070/crystal'
 .PHONY: run
 
 

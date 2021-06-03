@@ -11,10 +11,10 @@ build:
 .PHONY: build
 
 
-# run noske image, mount data/ and use host port 10070
+# run noske image, mount corpora/ and use host port 10070
 run:
 	@make -s stop
-	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/data,dst=/data noske
+	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske
 	@echo 'URL: http://localhost:10070/crystal'
 .PHONY: run
 
@@ -47,6 +47,6 @@ compile:
 # stop container, remove image, remove compiled corpora
 clean:
 	@make -s stop
-	docker image rm noske
-	sudo rm -vrf data/corpora/*/indexed/
+	# docker image rm noske
+	sudo rm -vrf corpora/*/indexed/
 .PHONY: clean

@@ -5,8 +5,8 @@ PATH emagyardemo
 ENCODING "UTF-8"
 LANGUAGE "Hungarian"
 
-PATH   '/data/corpora/emagyardemo/indexed/'
-VERTICAL  '/data/corpora/emagyardemo/vertical/source'
+PATH   '/corpora/emagyardemo/indexed/'
+VERTICAL  '/corpora/emagyardemo/vertical/source'
 
 INFOHREF "XXX"
 TAGSETDOC "http://e-magyar.hu/hu/textmodules/emmorph_codelist"

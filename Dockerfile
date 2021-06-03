@@ -77,12 +77,15 @@ RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TODO:
-# # Place corpora
+# Place corpora
 # COPY data /data
 # RUN ln -s /data/registry /data/corpora/registry
 # COPY data /tmp/data
-# RUN mv /tmp/data/corpora/* /home/corpora/ && mv /tmp/data/registry /home/registry && rm -rf /tmp/data && \
-#  ln -s /home/corpora /corpora && ln -s /home/registry /home/corpora/registry
+# RUN mv /tmp/data/corpora/* /home/corpora/ && \
+#     mv /tmp/data/registry /home/registry && \
+#     rm -rf /tmp/data && \
+#     ln -s /home/corpora /corpora && \
+#     ln -s /home/registry /home/corpora/registry
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

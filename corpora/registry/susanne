@@ -5,8 +5,8 @@ PATH susanne
 ENCODING "UTF-8"
 LANGUAGE "English"
 
-PATH   '/data/corpora/susanne/indexed/'
-VERTICAL  '/data/corpora/susanne/vertical/source'
+PATH   '/corpora/susanne/indexed/'
+VERTICAL  '/corpora/susanne/vertical/source'
 
 
 INFOHREF "http://www.grsampson.net/Resources.html"

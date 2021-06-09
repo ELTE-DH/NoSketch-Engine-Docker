@@ -24,8 +24,8 @@ This docker image is based on Debian stable with some additional hacks for conve
 
 ## CLI Usage
 
-- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`docker run -it nosketch_engine COMMAND PARAMS`). E.g. `docker run -it nosketch_engine encodevert -h` 
-- To get a shell in the container use the following command: `docker run -p80:80 -it --entrypoint /bin/bash nosketch_engine`
+- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`docker run -it --rm nosketch_engine COMMAND PARAMS`). E.g. `docker run -it --rm nosketch_engine encodevert -h`
+- To get a shell in the container use the following command: `docker run --rm -it --entrypoint /bin/bash nosketch_engine`
 
 ## Demo on Dockerhub
 

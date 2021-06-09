@@ -49,7 +49,7 @@ class BonitoCGI (WSEval, UserCGI):
     # set available corpora, e.g.: corplist = ['susanne', 'bnc', 'biwec']
     if not os.environ.has_key ('MANATEE_REGISTRY'):
         # TODO: SET THIS APROPRIATELY!
-        os.environ['MANATEE_REGISTRY'] = '/data/registry'
+        os.environ['MANATEE_REGISTRY'] = '/corpora/registry'
     corplist = [corp_name.decode('UTF-8') for corp_name in os.listdir(os.environ['MANATEE_REGISTRY'])]
     # set default corpus
     if len(corplist) > 0:

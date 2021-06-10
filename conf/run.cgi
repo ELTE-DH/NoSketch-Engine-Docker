@@ -86,7 +86,7 @@ if __name__ == '__main__':
         username = None
     if not os.environ.has_key ('MANATEE_REGISTRY'):
         # TODO: SET THIS APROPRIATELY!
-        os.environ['MANATEE_REGISTRY'] = '/data/registry'
+        os.environ['MANATEE_REGISTRY'] = '/corpora/registry'
     if ";prof=" in os.environ['REQUEST_URI'] or "&prof=" in os.environ['REQUEST_URI']:
         import cProfile, pstats, tempfile
         proffile = tempfile.NamedTemporaryFile()

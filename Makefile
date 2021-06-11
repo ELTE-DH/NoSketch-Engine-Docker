@@ -44,6 +44,12 @@ compile:
 .PHONY: compile
 
 
+# test command line usage
+test_cli:
+	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"][word="Gras"]'
+	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpinfo -s susanne
+
+
 # stop container, remove image, remove compiled corpora
 clean:
 	@make -s stop

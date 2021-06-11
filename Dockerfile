@@ -3,7 +3,6 @@ FROM debian:buster-slim
 
 
 # Install noske dependencies
-
 ## deb packages
 RUN apt-get update && \
     apt-get install -y \
@@ -47,35 +46,31 @@ RUN cd bonito* && \
     ./setupbonito /var/www/bonito /var/lib/bonito && \
     chown -R www-data:www-data /var/lib/bonito && \
     sed -i 's#wtr = int(words) / float(tokens)#wtr = float(words) / float(tokens)#' \
-    /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
+        /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
 
 ## GDEX
 RUN cd gdex* && \
     python2 setup.py install
 
 ## Crystal
-### HACK2: Modify shell in Makefile to bash to handle bashism
-### HACK3: add user and chown node_modules directory for node-sass build
-### HACK4: modify URL_BONITO to be set dynamically to the request domain in every request
-RUN cd crystal* && \
-    sed  -i '1i SHELL:=/bin/bash' Makefile && \
-    useradd corpora && \
-    mkdir /home/corpora && \
-    chown -R corpora:corpora /home/corpora /tmp/noske_files/crystal*/ && \
-    su -l corpora -c "make -C /tmp/noske_files/crystal*/" && \
-    make install && \
+### HACK2: Modify npm install command in Makefile to handle "permission denied"
+### HACK3: modify URL_BONITO to be set dynamically to the request domain in every request
+RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
+    make -C crystal*/ install SHELL=/bin/bash && \
     sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' /var/www/crystal/config.js
 
 
+# Copy config files
 COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY conf/htpasswd /var/lib/bonito/htpasswd
 COPY conf/*.sh /usr/local/bin/
 COPY conf/run.cgi /var/www/bonito/
 
+
+# Remove unnecessary files
 RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*
 
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]
-
 EXPOSE 80

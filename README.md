@@ -15,17 +15,19 @@ This docker image is based on Debian stable with some additional hacks for conve
 
 ## Usage
 
-1. Put vert file in: `data/corpora/CORPUS_NAME/vertical` (see example in `data/corpora/*/vertical`)
-2. Put config in: `data/registry/CORPUS_NAME` (see example in `data/registry/*`)
-3. (Optional: password authentication) Uncomment relevant config lines in `conf/000-default.conf` and set user and password in `conf/htpasswd`   
-4. `docker build . -t nosketch_engine` (can run for 5 minutes or something)
-5. `docker run --rm --name noske -p80:80 nosketch_engine`
-6. Navigate to http://DOMAIN/crystal/ to use
+1. Put vert file in: `corpora/CORPUS_NAME/vertical` (see example in `corpora/*/vertical`)
+1. Put config in: `corpora/registry/CORPUS_NAME` (see example in `corpora/registry/*`)
+1. (Optional: password authentication) Uncomment relevant config lines in `conf/000-default.conf` and set user and password in `conf/htpasswd`   
+1. Build docker image: `make build`  (can run for 5 minutes or something)
+1. Compile all corpora: `make compile`
+1. Run docker container: `make run`
+1. Navigate to http://localhost:10070/crystal/ to use
 
 ## CLI Usage
 
-- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`docker run -it --rm nosketch_engine COMMAND PARAMS`). E.g. `docker run --rm -it --mount type=bind,src=$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"][word="Gras"]'`
-- To get a shell in the container use the following command: `docker run --rm -it --entrypoint /bin/bash nosketch_engine`
+- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`docker run --rm -it --mount type=bind,src=$(pwd)/corpora,dst=/corpora noske:latest COMMAND PARAMS`).
+  - E.g. `docker run --rm -it --mount type=bind,src=$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"]'`
+- To get a shell in the container use the following command: `docker run --rm -it --entrypoint /bin/bash noske`
 
 ## Demo on Dockerhub
 

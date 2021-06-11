@@ -14,7 +14,7 @@ build:
 # run noske image, mount corpora/ and use host port 10070
 run:
 	@make -s stop
-	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske
+	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest
 	@echo 'URL: http://localhost:10070/crystal'
 .PHONY: run
 

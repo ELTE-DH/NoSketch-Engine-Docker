@@ -29,18 +29,15 @@ stop:
 .PHONY: stop
 
 
-# connect to running noske container
+# connect to running noske container, start a bash shell
 connect:
-	@make -s run
 	docker exec -it noske /bin/bash
 .PHONY: connect
 
 
 # compile all corpora
 compile:
-	@make -s run
-	docker exec -it noske "/usr/local/bin/compile.sh"
-	@make -s stop
+	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest compile.sh
 .PHONY: compile
 
 
@@ -48,6 +45,7 @@ compile:
 test_cli:
 	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"][word="Gras"]'
 	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpinfo -s susanne
+.PHONY: test_cli
 
 
 # stop container, remove image, remove compiled corpora

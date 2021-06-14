@@ -25,9 +25,9 @@ This docker image is based on Debian stable with some additional hacks for conve
 
 ## CLI Usage
 
-- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`docker run --rm -it --mount type=bind,src=$(pwd)/corpora,dst=/corpora noske:latest COMMAND PARAMS`).
-  - E.g. `docker run --rm -it --mount type=bind,src=$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"]'`
-- To get a shell in the container use the following command: `docker run --rm -it --entrypoint /bin/bash noske`
+- To run NoSketch Engine CLI commands run the docker and add the command and its parameters at the end of the original command (`make execute CMD=COMMAND PARAMS`).
+  - E.g. `make execute CMD="corpinfo -s susanne"`
+- To get a shell to a running container named "noske" use `make connect`.
 
 ## Demo on Dockerhub
 

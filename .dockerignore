@@ -1,4 +1,4 @@
-data/
+corpora/
 .git/
 Dockerfile
 LICENSE

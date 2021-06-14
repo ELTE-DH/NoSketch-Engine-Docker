@@ -1,1 +1,5 @@
-**/indexed/
+corpora/*
+!corpora/susanne/*
+!corpora/emagyardemo/*
+!corpora/registry/*
+corpora/**/indexed/*

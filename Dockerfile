@@ -53,24 +53,24 @@ RUN cd gdex* && \
     python2 setup.py install
 
 ## Crystal
-### HACK2: Modify shell in Makefile to bash to handle bashism
-### HACK3: Modify npm install command in Makefile to handle "permission denied"
+### HACK2: Modify npm install command in Makefile to handle "permission denied"
+### HACK3: Modify shell in Makefile to bash to handle bashism
 ### HACK4: modify URL_BONITO to be set dynamically to the request domain in every request
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
     make -C crystal*/ install SHELL=/bin/bash && \
-    sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' /var/www/crystal/config.js
-
-
-# Copy config files
-COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-COPY conf/htpasswd /var/lib/bonito/htpasswd
-COPY conf/*.sh /usr/local/bin/
-COPY conf/run.cgi /var/www/bonito/
+    sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
+    /var/www/crystal/config.js
 
 
 # Remove unnecessary files
 RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*
 
+
+# Copy config files
+COPY conf/*.sh /usr/local/bin/
+COPY conf/run.cgi /var/www/bonito/
+COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY conf/htpasswd /var/lib/bonito/htpasswd
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

@@ -1,5 +1,12 @@
+# Private coropra
 corpora/*
 !corpora/susanne/
 !corpora/emagyardemo/
-!corpora/registry/
+!corpora/registry/susanne
+!corpora/registry/emagyardemo
+
+# Compiled corpora
 corpora/**/indexed/*
+
+# PyCharm
+.idea

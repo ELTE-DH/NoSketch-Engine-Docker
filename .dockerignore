@@ -1,0 +1,8 @@
+corpora/
+.git/
+Dockerfile
+LICENSE
+Makefile
+README.md
+.dockerignore
+.gitignore

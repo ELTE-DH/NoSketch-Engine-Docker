@@ -1,4 +1,6 @@
 PORT=10070
+CMD=corpquery susanne '[word="Mardi"][word="Gras"]'
+
 
 all: build compile run
 .PHONY: all
@@ -37,17 +39,16 @@ connect:
 .PHONY: connect
 
 
+# execute commmand in CMD variable
+execute:
+	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest $(CMD)
+.PHONY: execute
+
+
 # compile all corpora
 compile:
 	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest compile.sh
 .PHONY: compile
-
-
-# test command line usage
-test_cli:
-	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpquery susanne '[word="Mardi"][word="Gras"]'
-	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest corpinfo -s susanne
-.PHONY: test_cli
 
 
 # stop container, remove image, remove compiled corpora

@@ -1,3 +1,5 @@
+PORT=10070
+
 all: build compile run
 .PHONY: all
 
@@ -11,11 +13,11 @@ build:
 .PHONY: build
 
 
-# run noske image, mount corpora/ and use host port 10070
+# run noske image, mount corpora/ and use host port $PORT
 run:
 	@make -s stop
-	docker run -d --rm --name noske -p10070:80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest
-	@echo 'URL: http://localhost:10070/crystal'
+	docker run -d --rm --name noske -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora noske:latest
+	@echo 'URL: http://localhost:$(PORT)/crystal'
 .PHONY: run
 
 

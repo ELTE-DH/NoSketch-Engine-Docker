@@ -53,8 +53,9 @@ RUN cd gdex* && \
     python2 setup.py install
 
 ## Crystal
-### HACK2: Modify npm install command in Makefile to handle "permission denied"
-### HACK3: modify URL_BONITO to be set dynamically to the request domain in every request
+### HACK2: Modify shell in Makefile to bash to handle bashism
+### HACK3: Modify npm install command in Makefile to handle "permission denied"
+### HACK4: modify URL_BONITO to be set dynamically to the request domain in every request
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
     make -C crystal*/ install SHELL=/bin/bash && \
     sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' /var/www/crystal/config.js

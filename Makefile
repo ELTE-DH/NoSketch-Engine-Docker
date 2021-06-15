@@ -1,6 +1,7 @@
 PORT=10070
 CMD=corpquery susanne '[word="Mardi"][word="Gras"]'
 IMAGE_NAME=nosketch-engine
+CONTAINER_NAME=noske
 
 
 all: build compile run
@@ -17,28 +18,28 @@ build:
 .PHONY: build
 
 
-# run $(IMAGE_NAME) image, mount corpora/ and use host port $PORT
+# run $(CONTAINER_NAME) image, mount corpora/ and use host port $PORT
 run:
 	@make -s stop
-	docker run -d --rm --name $(IMAGE_NAME) -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
+	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
 	    $(IMAGE_NAME):latest
 	@echo 'URL: http://localhost:$(PORT)/crystal'
 .PHONY: run
 
 
-# stop running $(IMAGE_NAME) container
+# stop running $(CONTAINER_NAME) container
 stop:
-	@if [ "$$(docker container ls -f name=$(IMAGE_NAME) -q)" ] ; then \
-		docker container stop $(IMAGE_NAME) ; \
+	@if [ "$$(docker container ls -f name=$(CONTAINER_NAME) -q)" ] ; then \
+		docker container stop $(CONTAINER_NAME) ; \
 	else \
-		echo 'no running $(IMAGE_NAME) container' ; \
+		echo 'no running $(CONTAINER_NAME) container' ; \
 	fi
 .PHONY: stop
 
 
-# connect to running $(IMAGE_NAME) container, start a bash shell
+# connect to running $(CONTAINER_NAME) container, start a bash shell
 connect:
-	docker exec -it $(IMAGE_NAME) /bin/bash
+	docker exec -it $(CONTAINER_NAME) /bin/bash
 .PHONY: connect
 
 
@@ -56,7 +57,7 @@ compile:
 
 # stop container, remove image, remove compiled corpora
 clean:
-	@make -s stop
+	@make -s stop CONTAINER_NAME=$(CONTAINER_NAME)
 	docker image rm $(IMAGE_NAME)
 	sudo rm -vrf corpora/*/indexed/
 .PHONY: clean

@@ -59,7 +59,7 @@ RUN cd gdex* && \
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
     make -C crystal*/ install SHELL=/bin/bash && \
     sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
-    /var/www/crystal/config.js
+        /var/www/crystal/config.js
 
 
 # Remove unnecessary files

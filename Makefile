@@ -23,7 +23,7 @@ run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
 	    $(IMAGE_NAME):latest
-	@echo 'URL: http://localhost:$(PORT)/crystal'
+	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
 
 

@@ -22,8 +22,8 @@ RUN apt-get update && \
 RUN pip install signalfd
 
 
-# Enable apache CGI
-RUN a2enmod cgi
+# Enable apache CGI and mod_rewrite
+RUN a2enmod cgi rewrite
 
 
 # Install noske components

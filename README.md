@@ -35,7 +35,7 @@ See [Dockerfile](Dockerfile) for details
 1. Run docker container: `make run` (one must add `IMAGE_NAME` variable if it differs from the default: `make run IMAGE_NAME=noske`)
     - Optional: __set different container name__ with `CONTAINER_NAME` variable: `make run CONTAINER_NAME=noske-test` (default: `noske`)
     - Optional: __set different port__ with `PORT=DESIRED_PORT_NUMBER` variable: `make run PORT=12345` (default: `10070`)
-2. Navigate to http://SERVER_NAME:PORT/crystal/ to use
+2. Navigate to http://SERVER_NAME:PORT/ to use
 
 ## 3b. CLI Usage
 

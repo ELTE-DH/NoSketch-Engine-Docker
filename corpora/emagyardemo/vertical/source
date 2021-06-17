@@ -1,4 +1,4 @@
-<doc file="A01" n="1">
+<doc file="file" n="1">
 <s>
 Hát	" "	[{"lemma": "hát", "tag": "[/Adv]", "morphana": "hát[/Adv]=hát", "readable": "hát[/Adv]", "twolevel": "h:h á:á t:t :[/Adv]"}, {"lemma": "hát", "tag": "[/Cnj]", "morphana": "hát[/Cnj]=hát", "readable": "hát[/Cnj]", "twolevel": "h:h á:á t:t :[/Cnj]"}, {"lemma": "hát", "tag": "[/Inj-Utt]", "morphana": "hát[/Inj-Utt]=hát", "readable": "hát[/Inj-Utt]", "twolevel": "h:h á:á t:t :[/Inj-Utt]"}, {"lemma": "hát", "tag": "[/N][Nom]", "morphana": "hát[/N]=hát+[Nom]=", "readable": "hát[/N] + [Nom]", "twolevel": "h:h á:á t:t :[/N] :[Nom]"}]	hát	[/Adv]	ADV	_	1	MODE	5	O	O
 ez	" "	[{"lemma": "ez", "tag": "[/Det|Pro][Nom]", "morphana": "ez[/Det|Pro]=ez+[Nom]=", "readable": "ez[/Det|Pro] + [Nom]", "twolevel": "e:e z:z :[/Det|Pro] :[Nom]"}, {"lemma": "ez", "tag": "[/N|Pro][Nom]", "morphana": "ez[/N|Pro]=ez+[Nom]=", "readable": "ez[/N|Pro] + [Nom]", "twolevel": "e:e z:z :[/N|Pro] :[Nom]"}]	ez	[/Det|Pro][Nom]	PRON	Case=Nom|Number=Sing|Person=3|PronType=Dem	2	SUBJ	5	1-NP	O

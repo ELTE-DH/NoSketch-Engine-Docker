@@ -21,7 +21,7 @@ collect:
 
 # [2]/option#1 -- only words
 analyse-none:
-	cat $(FILE).txt | wordperline > $(FILE).tsv
+	cat $(FILE).txt | tr '	' '\n' | tr ' ' '\n' > $(FILE).tsv
 
 
 # [2]/option#2 -- default e-magyar analysis

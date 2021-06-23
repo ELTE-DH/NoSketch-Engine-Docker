@@ -8,7 +8,7 @@ See [Dockerfile](Dockerfile) for details.
 ## TL;DR
 
  1. `git clone https://github.com/ELTE-DH/NoSketch-Engine-Docker`
- 2. `make build` – to create the docker image (5 minutes)
+ 2. `make pull` – to download the docker image
  3. `make compile` – to compile sample corpora
  4. `make execute` – to run a CLI query on `susanne` corpus
  5. `make run` – to launch the docker container 
@@ -28,7 +28,7 @@ See [Dockerfile](Dockerfile) for details.
 ### 1. Get the Docker image
 
 - Either pull the prebuilt image from [Dockerhub](https://hub.docker.com/r/eltedh/nosketch-engine): `make pull` (or `docker pull eltedh/nosketch-engine:latest`)
-- Or build the image yourself (the process can take 5 minutes or so): `make build`
+- Or build your own image yourself (the process can take 5 minutes or so): `make build IMAGE_NAME=myimage` – be sure to name your image using the `IMAGE_NAME` parameter
     - Optional: enable __password authentication__: Uncomment relevant config lines in [`conf/000-default.conf`](conf/000-default.conf) and set user and password in [`conf/htpasswd`](conf/htpasswd) (e.g. use `htpasswd -c conf/htpasswd USERNAME` command from `apache2-utils` package)
 
 ### 2. Compile your corpus
@@ -38,21 +38,21 @@ See [Dockerfile](Dockerfile) for details.
 2. Put config in: `corpora/registry/CORPUS_NAME` file\
 (see examples in [`corpora/registry/susanne`](corpora/registry/susanne) and [`corpora/registry/emagyardemo`](corpora/registry/emagyardemo))
 3. Compile all corpora listed in [`corpora/registry`](corpora/registry) directory using the docker image: `make compile`
-    - To compile _one_ corpus at a time, use the following command: `make execute CMD="compilecorp --no-ske CORPUS_NAME"`
+    - To compile _one_ corpus at a time, use the following command: `make execute CMD="compilecorp --no-ske CORPUS_REGISTRY_FILE"`
 
-### 3. Run the container
+### 3a. Run the container
 
 1. Run docker container: `make run`
 2. Navigate to `http://SERVER_NAME:10070/` to use
 
-### 4. CLI Usage
+### 3b. CLI Usage
 
 - To run NoSketch Engine CLI commands run the docker image and add the desired command and its parameters (e.g. `corpinfo -s susanne`) at the end of the command:
     - `make execute CMD="corpinfo -s susanne"`
     - or: `docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora ${IMAGE_NAME}:latest corpinfo -s susanne`
 - To get a shell to a running container use `make connect`
 
-### 5. Additional commands
+### 4. Additional commands
 
 - `make stop`: stops the container
 - `make clean`: stops the container, removes indexed corpora and deletes docker image – __use with caution!__
@@ -68,7 +68,7 @@ If there is a need to change these, `make` commands can be supplemented
 by `IMAGE_NAME=myimage` and/or `CONTAINTER_NAME=mycontainer` and/or `PORT=myport`.
 
 E.g. `make build IMAGE_NAME=myimage` build an image called `myimage`; and
-`make run CONTAINER_NAME=mycontainer PORT=12345` launches the image in a container called `mycontainer` which will use port `12345`.
+`make run IMAGE_NAME=myimage CONTAINER_NAME=mycontainer PORT=12345` launches the image called `myimage` in a container called `mycontainer` which will use port `12345`.
 In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
@@ -88,8 +88,7 @@ In the rare case of multiple different docker images, be sure to name them diffe
 In the more common case of multiple different docker containers running simultaneously,
 be sure to name them differently (by using `CONTAINER_NAME`) and also be sure to use different port for each of them (by using `PORT`).
 
-Be aware that `make pull` downloads a docker image called `eltedh/nosketch-engine` (not equal with the default image name `nosketch-engine`!).
-So if you use `make pull` you should provide `IMAGE_NAME=eltedh/nosketch-engine` for every `make` command which accepts this parameter.
+If you want to build your own docker image be sure to include the `IMAGE_NAME` parameter into the build command: `make build IMAGE_NAME=myimage` and also provide `IMAGE_NAME=myimage` for every `make` command which accepts this parameter.
 
 ## License
 

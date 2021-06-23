@@ -1,6 +1,7 @@
 PORT=10070
 CMD=corpquery susanne '[word="Mardi"][word="Gras"]'
-IMAGE_NAME=nosketch-engine
+PREBUILT_IMAGE_NAME=eltedh/nosketch-engine
+IMAGE_NAME=$(PREBUILT_IMAGE_NAME)
 CONTAINER_NAME=noske
 
 
@@ -9,7 +10,7 @@ all: build compile run
 
 
 pull:
-	docker pull eltedh/nosketch-engine:latest
+	docker pull $(PREBUILT_IMAGE_NAME):latest
 .PHONY: pull
 
 

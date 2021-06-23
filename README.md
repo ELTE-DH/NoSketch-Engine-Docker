@@ -12,7 +12,7 @@ See [Dockerfile](Dockerfile) for details.
  3. `make compile` – to compile sample corpora
  4. `make execute` – to run a CLI query on `susanne` corpus
  5. `make run` – to launch the docker container 
- 6. navigate to `http://localhost:10070/crystal` to try the GUI
+ 6. Navigate to `http://localhost:10070/` to try the WebUI
 
 ## Features
 

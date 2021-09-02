@@ -7,6 +7,7 @@ FROM debian:buster-slim
 RUN apt-get update && \
     apt-get install -y \
         apache2 \
+        libapache2-mod-shib \
         build-essential \
         libltdl-dev \
         libpcre++-dev \
@@ -23,7 +24,7 @@ RUN pip install signalfd
 
 
 # Enable apache CGI and mod_rewrite
-RUN a2enmod cgi rewrite
+RUN a2enmod cgi rewrite shib
 
 
 # Install noske components
@@ -56,7 +57,9 @@ RUN cd gdex* && \
 ### HACK2: Modify npm install command in Makefile to handle "permission denied"
 ### HACK3: Modify shell in Makefile to bash to handle bashism
 ### HACK4: modify URL_BONITO to be set dynamically to the request domain in every request
+COPY conf/page-dashboard.tag /tmp/noske_files/
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
+    cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
     make -C crystal*/ install SHELL=/bin/bash && \
     sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
         /var/www/crystal/config.js
@@ -68,9 +71,14 @@ RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*
 
 # Copy config files
 COPY conf/*.sh /usr/local/bin/
-COPY conf/run.cgi /var/www/bonito/
+COPY conf/run.cgi /var/www/bonito/run.cgi
 COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY conf/shibboleth2.xml /etc/shibboleth/shibboleth2.xml
+COPY conf/*.crt /etc/shibboleth/
+### These files should be updated if needed (see make update-htaccess)
+COPY conf/htaccess /var/www/.htaccess
 COPY conf/htpasswd /var/lib/bonito/htpasswd
+
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

@@ -1,5 +1,6 @@
 corpora/
 .git/
+letsencrypt/
 Dockerfile
 LICENSE
 Makefile

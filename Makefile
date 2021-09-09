@@ -52,7 +52,9 @@ execute:
 
 # compile all corpora
 compile:
-	sudo rm -vrf corpora/*/indexed/
+ifneq "$(wildcard corpora/*/indexed/)" ""
+	sudo rm -vr corpora/*/indexed/
+endif
 	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD=compile.sh
 .PHONY: compile
 

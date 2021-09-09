@@ -39,6 +39,7 @@ See [Dockerfile](Dockerfile) for details.
 (see examples in [`corpora/registry/susanne`](corpora/registry/susanne) and [`corpora/registry/emagyardemo`](corpora/registry/emagyardemo))
 3. Compile all corpora listed in [`corpora/registry`](corpora/registry) directory using the docker image: `make compile`
     - To compile _one_ corpus at a time, use the following command: `make execute CMD="compilecorp --no-ske CORPUS_REGISTRY_FILE"`
+    - If you want to __recompile__ a single corpus after either the configuration or the vertical files of that corpus have been modified, the root-owned `indexed` subdirectory that was generated in the course of the previous compilation should be removed before recompilation, e.g. `sudo rm -r corpora/susanne/indexed/`. (This is done automatically for all corpora by `make compile`.) If this subdirectory is not removed, the compilation will likely fail with an unhelpful error message, or the index will not be generated as expected.
 
 ### 3a. Run the container
 

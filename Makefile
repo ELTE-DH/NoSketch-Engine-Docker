@@ -52,6 +52,7 @@ execute:
 
 # compile all corpora
 compile:
+	sudo rm -vrf corpora/*/indexed/
 	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD=compile.sh
 .PHONY: compile
 

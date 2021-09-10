@@ -10,7 +10,7 @@ See [Dockerfile](Dockerfile) for details.
  1. `git clone https://github.com/ELTE-DH/NoSketch-Engine-Docker`
  2. `make pull` – to download the docker image
  3. `make compile` – to compile sample corpora
- 4. `make execute` – to run a CLI query on `susanne` corpus
+ 4. `make execute` – to execute a command in the docker container (runs a test CLI query on `susanne` corpus by default)
  5. `make run` – to launch the docker container 
  6. Navigate to `http://localhost:10070/` to try the WebUI
 
@@ -38,8 +38,7 @@ See [Dockerfile](Dockerfile) for details.
 2. Put config in: `corpora/registry/CORPUS_NAME` file\
 (see examples in [`corpora/registry/susanne`](corpora/registry/susanne) and [`corpora/registry/emagyardemo`](corpora/registry/emagyardemo))
 3. Compile all corpora listed in [`corpora/registry`](corpora/registry) directory using the docker image: `make compile`
-    - To compile _one_ corpus at a time, use the following command: `make execute CMD="compilecorp --no-ske CORPUS_REGISTRY_FILE"`
-    - If you want to __recompile__ a single corpus after either the configuration or the vertical files of that corpus have been modified, the root-owned `indexed` subdirectory that was generated in the course of the previous compilation should be removed before recompilation, e.g. `sudo rm -r corpora/susanne/indexed/`. (This is done automatically for all corpora by `make compile`.) If this subdirectory is not removed, the compilation will likely fail with an unhelpful error message, or the index will not be generated as expected.
+    - NOTE: `make compile` has no effect on corpora that have already been compiled. If you want to __recompile__ a single corpus after either the configuration or the vertical files of that corpus have been modified, use the following command: `make recompile CORPUS_REGISTRY_FILE=susanne"` (replacing `susanne` by your registry file). The same command can also be used to compile a single corpus that has not yet been compiled.
 
 ### 3a. Run the container
 

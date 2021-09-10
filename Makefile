@@ -3,6 +3,8 @@ CMD=corpquery susanne '[word="Mardi"][word="Gras"]'
 PREBUILT_IMAGE_NAME=eltedh/nosketch-engine
 IMAGE_NAME=$(PREBUILT_IMAGE_NAME)
 CONTAINER_NAME=noske
+INDEX_DIRS=$(wildcard corpora/*/indexed/)
+CORPUS_REGISTRY_FILE=susanne
 
 
 all: build compile run
@@ -51,12 +53,26 @@ execute:
 
 
 # compile all corpora
-compile:
-ifneq "$(wildcard corpora/*/indexed/)" ""
-	sudo rm -vr corpora/*/indexed/
-endif
+compile: check_existing
 	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD=compile.sh
-.PHONY: compile
+
+check_existing:
+ifneq "$(INDEX_DIRS)" ""
+	@echo WARNING: The following corpora have already been compiled and will NOT be
+	@echo modified: $(INDEX_DIRS) | sed -e s/corpora.//g | sed -e s/.indexed.//g
+	@echo "\nIf you want to recompile them, run 'make recompile <CORPUS>' instead.\n"
+	@echo Are you sure you want to continue?
+	@echo -n "This will compile all corpora that have not been compiled yet. [y/N] " && read ans && [ $${ans:-N} = y ]
+endif
+.PHONY: compile check_existing
+
+
+# recompile a single corpus
+recompile:
+	@echo WARNING: This will recompile $(CORPUS_REGISTRY_FILE) and all its components
+	@echo "Are you sure you want to continue? [y/N] " && read ans && [ $${ans:-N} = y ]
+	make execute CMD="compilecorp --no-ske --recompile-corpus /corpora/registry/$(CORPUS_REGISTRY_FILE)"
+.PHONY: recompile
 
 
 # stop container, remove image, remove compiled corpora

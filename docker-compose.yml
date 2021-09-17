@@ -30,6 +30,7 @@ services:
     environment:
         SERVER_NAME: "${SERVER_NAME:? Please set SERVER_NAME environment variable!}"
         SERVER_ALIAS: "${SERVER_ALIAS:? Please set SERVER_ALIAS environment variable!}"
+        CITATION_LINK: "${CITATION_LINK:-https://github.com/elte-dh/NoSketch-Engine-Docker}"
     volumes:
       - type: bind
         source: ./corpora

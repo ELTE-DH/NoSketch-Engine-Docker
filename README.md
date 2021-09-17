@@ -83,10 +83,11 @@ By default,
 - the name of the docker image (`IMAGE_NAME`) is `eltedh/nosketch-engine`,
 - the name of the docker container (`CONTAINTER_NAME`) is `noske`,
 - the port number which the docker container uses (`PORT`) is `10070`,
+- the citation link (`CITATION_LINK`) is `https://github.com/elte-dh/NoSketch-Engine-Docker`,
 - the server name required for Let's Encrypt and/or Shibboleth (`SERVER_NAME`) is `https://sketchengine.company.com/`,
 - the server alias required for Let's Encrypt and/or Shibboleth (`SERVER_ALIAS`) is `sketchengine.company.com`,
-- the e-mail address required Let's Encrypt (`LETS_ENCRYPT_EMAIL`) is not set,
-- the citation link (`CITATION_LINK`) is `https://github.com/elte-dh/NoSketch-Engine-Docker`.
+- the e-mail address required Let's Encrypt (`LETS_ENCRYPT_EMAIL`) is not set.
+
 
 If there is a need to change these, set them as environment variables (e.g. `export IMAGE_NAME=myimage`)
  or supplement `make` commands with the appropriate values (e.g. `make run PORT=8080`).
@@ -98,19 +99,19 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
-| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `SERVER_NAME` | `SERVER_ALIAS` | `LETS_ENCRYPT_EMAIL` | `CITATION_LINK` |
-|------------------------|:------------:|:----------------:|:------:|:-------------:|:--------------:|:--------------------:|:---------------:|
-| `make pull`            |       ✔      |         .        |    .   |       .       |        .       |           .          |        .        |
-| `make build`           |       ✔      |         .        |    .   |       .       |        .       |           .          |        ✔        |
-| `make compile`         |       ✔      |         .        |    .   |       .       |        .       |           .          |        .        |
-| `make execute`         |       ✔      |         .        |    .   |       ✔       |        ✔       |           .          |        .        |
-| `make run`             |       ✔      |         ✔        |    ✔   |       ✔       |        ✔       |           .          |        .        |
-| `make connect`         |       .      |         ✔        |    .   |       .       |        .       |           .          |        .        |
-| `make stop`            |       .      |         ✔        |    .   |       .       |        .       |           .          |        .        |
-| `make clean`           |       ✔      |         ✔        |    .   |       .       |        .       |           .          |        .        |
-| `make create-cert`     |       .      |         .        |    .   |       .       |        .       |           .          |        .        |
-| `make remove-cert`     |       .      |         .        |    .   |       .       |        .       |           .          |        .        |
-| `make update-htaccess` |       .      |         ✔        |    .   |       .       |        .       |           .          |        .        |
+| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `SERVER_NAME` | `SERVER_ALIAS` | `CITATION_LINK` | `LETS_ENCRYPT_EMAIL` |
+|------------------------|:------------:|:----------------:|:------:|:-------------:|:--------------:|:---------------:|:--------------------:|
+| `make pull`            |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
+| `make build`           |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
+| `make compile`         |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
+| `make execute`         |       ✔      |         .        |    .   |       ✔       |        ✔       |        ✔        |           .          |
+| `make run`             |       ✔      |         ✔        |    ✔   |       ✔       |        ✔       |        ✔        |           .          |
+| `make connect`         |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
+| `make stop`            |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
+| `make clean`           |       ✔      |         ✔        |    .   |       .       |        .       |        .        |           .          |
+| `make create-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |           .          |
+| `make remove-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |           .          |
+| `make update-htaccess` |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
 
 `LETS_ENCRYPT_EMAIL` variable is only used in `docker-compose.yml`.
 
@@ -162,7 +163,7 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
 ## Citation link
 
 You can set a link to your publications which you require to cite.
-Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"`
+Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in [docker-compose.yml](docker-compose.yml).
 
 The link is displayed in the lower-right corner of the main dashboard if any type of authentication is set.
 

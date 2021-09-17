@@ -15,8 +15,5 @@ conf/sp.for.eduid.service.hu-key.crt
 # Let's encrypt's certificate cache
 letsencrypt/
 
-# Temp files
-conf/page-dashboard.tag
-
 # PyCharm
 .idea/

@@ -16,11 +16,9 @@ pull:
 .PHONY: pull
 
 
-# Replace placeholder link and build the image
+# Build $(IMAGE_NAME) docker image
 build:
-	sed "s#CITATION_LINK_PLACEHOLDER#$(CITATION_LINK)#" conf/page-dashboard.tag.template > conf/page-dashboard.tag
 	docker build -t $(IMAGE_NAME) .
-	rm -f conf/page-dashboard.tag
 .PHONY: build
 
 
@@ -44,8 +42,9 @@ remove-cert:
 run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
-		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) \
+		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
 		$(IMAGE_NAME):latest
+	@make -s update-htaccess
 	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
 
@@ -69,7 +68,7 @@ connect:
 # Execute commmand in CMD variable and set $(SERVER_NAME) & $(SERVER_ALIAS) environment variables for shibboleth
 execute:
 	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
-		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) \
+		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
  		$(IMAGE_NAME):latest "$(CMD)"
 .PHONY: execute
 

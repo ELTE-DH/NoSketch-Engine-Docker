@@ -25,7 +25,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   sketch_engine:
-    image: "${CONTAINER_NAME:-eltedh/nosketch-engine:latest}"
+    image: "${IMAGE_NAME:-eltedh/nosketch-engine:latest}"
     container_name: "${CONTAINER_NAME:-noske}"
     environment:
         SERVER_NAME: "${SERVER_NAME:? Please set SERVER_NAME environment variable!}"

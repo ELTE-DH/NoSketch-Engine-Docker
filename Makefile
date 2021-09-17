@@ -1,11 +1,10 @@
 PORT?=10070
 CMD?=corpquery susanne '[word="Mardi"][word="Gras"]'
-PREBUILT_IMAGE_NAME?=eltedh/nosketch-engine
-IMAGE_NAME?=$(PREBUILT_IMAGE_NAME)
+IMAGE_NAME?=eltedh/nosketch-engine
 CONTAINER_NAME?=noske
-SERVER_NAME?="https://sketchengine.company.com/"
-SERVER_ALIAS?="sketchengine.company.com"
-CITATION_LINK?="https://github.com/elte-dh/NoSketch-Engine-Docker"
+SERVER_NAME?=https://sketchengine.company.com/
+SERVER_ALIAS?=sketchengine.company.com
+CITATION_LINK?=https://github.com/elte-dh/NoSketch-Engine-Docker
 
 
 all: build compile run
@@ -13,7 +12,7 @@ all: build compile run
 
 
 pull:
-	docker pull $(PREBUILT_IMAGE_NAME):latest
+	docker pull $(IMAGE_NAME):latest
 .PHONY: pull
 
 
@@ -77,8 +76,8 @@ execute:
 
 # Update .htaccess and htpasswd files in container
 update-htaccess:
-	@cat conf/htaccess | docker exec -i $(CONTAINER_NAME) /bin/bash -c 'cat > /var/www/.htaccess'
-	@cat conf/htpasswd | docker exec -i $(CONTAINER_NAME) /bin/bash -c 'cat > /var/lib/bonito/htpasswd'
+	cat conf/htaccess | docker exec -i $(CONTAINER_NAME) /bin/bash -c 'cat > /var/www/.htaccess'
+	cat conf/htpasswd | docker exec -i $(CONTAINER_NAME) /bin/bash -c 'cat > /var/lib/bonito/htpasswd'
 .PHONY: update-htaccess
 
 

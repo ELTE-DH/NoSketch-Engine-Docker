@@ -99,19 +99,19 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
-| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `SERVER_NAME` | `SERVER_ALIAS` | `CITATION_LINK` | `LETS_ENCRYPT_EMAIL` |
-|------------------------|:------------:|:----------------:|:------:|:-------------:|:--------------:|:---------------:|:--------------------:|
-| `make pull`            |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
-| `make build`           |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
-| `make compile`         |       ✔      |         .        |    .   |       .       |        .       |        .        |           .          |
-| `make execute`         |       ✔      |         .        |    .   |       ✔       |        ✔       |        ✔        |           .          |
-| `make run`             |       ✔      |         ✔        |    ✔   |       ✔       |        ✔       |        ✔        |           .          |
-| `make connect`         |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
-| `make stop`            |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
-| `make clean`           |       ✔      |         ✔        |    .   |       .       |        .       |        .        |           .          |
-| `make create-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |           .          |
-| `make remove-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |           .          |
-| `make update-htaccess` |       .      |         ✔        |    .   |       .       |        .       |        .        |           .          |
+| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `SERVER_NAME` | `SERVER_ALIAS` | `CITATION_LINK` |
+|------------------------|:------------:|:----------------:|:------:|:-------------:|:--------------:|:---------------:|
+| `make pull`            |       ✔      |         .        |    .   |       .       |        .       |        .        |
+| `make build`           |       ✔      |         .        |    .   |       .       |        .       |        .        |
+| `make compile`         |       ✔      |         .        |    .   |       .       |        .       |        .        |
+| `make execute`         |       ✔      |         .        |    .   |       ✔       |        ✔       |        ✔        |
+| `make run`             |       ✔      |         ✔        |    ✔   |       ✔       |        ✔       |        ✔        |
+| `make connect`         |       .      |         ✔        |    .   |       .       |        .       |        .        |
+| `make stop`            |       .      |         ✔        |    .   |       .       |        .       |        .        |
+| `make clean`           |       ✔      |         ✔        |    .   |       .       |        .       |        .        |
+| `make create-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |
+| `make remove-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |
+| `make update-htaccess` |       .      |         ✔        |    .   |       .       |        .       |        .        |
 
 `LETS_ENCRYPT_EMAIL` variable is only used in `docker-compose.yml`.
 

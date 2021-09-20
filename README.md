@@ -10,7 +10,7 @@ See [Dockerfile](Dockerfile) for details.
  1. `git clone https://github.com/ELTE-DH/NoSketch-Engine-Docker`
  2. `make pull` – to download the docker image
  3. `make compile` – to compile sample corpora
- 4. `make execute` – to run a CLI query on `susanne` corpus
+ 4. `make execute` – to execute a command in the docker container (runs a test CLI query on `susanne` corpus by default)
  5. `make run` – to launch the docker container 
  6. Navigate to `http://localhost:10070/` to try the WebUI
 
@@ -38,7 +38,7 @@ See [Dockerfile](Dockerfile) for details.
 2. Put config in: `corpora/registry/CORPUS_NAME` file\
 (see examples in [`corpora/registry/susanne`](corpora/registry/susanne) and [`corpora/registry/emagyardemo`](corpora/registry/emagyardemo))
 3. Compile all corpora listed in [`corpora/registry`](corpora/registry) directory using the docker image: `make compile`
-    - To compile _one_ corpus at a time, use the following command: `make execute CMD="compilecorp --no-ske CORPUS_REGISTRY_FILE"`
+    - To compile _one_ corpus at a time (overwriting existing files), use the following command: `make execute CMD="compilecorp --no-ske --recompile-corpus CORPUS_REGISTRY_FILE"`
 
 ### 3a. Run the container
 
@@ -60,9 +60,10 @@ See [Dockerfile](Dockerfile) for details.
 ## `make` parameters, multiple images and multiple containers
 
 By default,
- * the name of the docker image is `nosketch-engine`,
- * the name of the docker container is `noske`,
- * the port which the docker container uses is `10070`.
+- the name of the docker image (`IMAGE_NAME`) is `eltedh/nosketch-engine`,
+- the name of the docker container (`CONTAINTER_NAME`) is `noske`,
+- the port number which the docker container uses (`PORT`) is `10070`,
+- the variable to force recompiling already indexed coropra (`FORCE_RECOMPILE`) is not set (empty or not set means false).
 
 If there is a need to change these, `make` commands can be supplemented
 by `IMAGE_NAME=myimage` and/or `CONTAINTER_NAME=mycontainer` and/or `PORT=myport`.
@@ -73,16 +74,16 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
-|command|`IMAGE_NAME`|`CONTAINER_NAME`|`PORT`|
-|---|:-:|:-:|:-:|
-|`make pull`|.|.|.|
-|`make build`|✔|.|.|
-|`make compile`|✔|.|.|
-|`make execute`|✔|.|.|
-|`make run`|✔|✔|✔|
-|`make connect`|.|✔|.|
-|`make stop`|.|✔|.|
-|`make clean`|✔|✔|.|
+| command        | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `FORCE_RECOMPILE` |
+|----------------|:------------:|:----------------:|:------:|:-----------------:|
+| `make pull`    |       .      |         .        |    .   |         .         |
+| `make build`   |       ✔      |         .        |    .   |         .         |
+| `make compile` |       ✔      |         .        |    .   |         ✔         |
+| `make execute` |       ✔      |         .        |    .   |         .         |
+| `make run`     |       ✔      |         ✔        |    ✔   |         .         |
+| `make connect` |       .      |         ✔        |    .   |         .         |
+| `make stop`    |       .      |         ✔        |    .   |         .         |
+| `make clean`   |       ✔      |         ✔        |    .   |         .         |
 
 In the rare case of multiple different docker images, be sure to name them differently (by using `IMAGE_NAME`).\
 In the more common case of multiple different docker containers running simultaneously,

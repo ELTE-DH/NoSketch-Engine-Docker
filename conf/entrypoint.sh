@@ -32,8 +32,10 @@ if [ $# -eq 1 ]; then
     if [[ -n "${HTPASSWD}" ]] || [[ ! -f "/var/lib/bonito/htpasswd" ]]; then
         echo "${HTPASSWD}" > /var/lib/bonito/htpasswd
     fi
-    # Must be started after apache
-    (sleep 5 && service shibd start && echo 'Shibd started.') &
+    # Must be started after apache (only if cert and key are not empty)
+    if [[ -s "/etc/shibboleth/sp.for.eduid.service.hu-cert.crt" ]]; then
+        (sleep 5 && service shibd start && echo 'Shibd started.') &
+    fi
     /usr/sbin/apache2ctl -D FOREGROUND
 else
     shift

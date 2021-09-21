@@ -87,6 +87,11 @@ compile:
 .PHONY: compile
 
 
+# Create a strong htpasswd
+htpasswd:
+	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD="htpasswd -nbB \"$(USER)\" \"$(PASSWORD)\""
+
+
 # Stop container, remove image, remove compiled corpora
 clean:
 	@make -s stop CONTAINER_NAME=$(CONTAINER_NAME)

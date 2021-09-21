@@ -67,8 +67,9 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
         /var/www/crystal/config.js
 
 
-# Remove unnecessary files
-RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*
+# Remove unnecessary files and create symlinks for utility commands
+RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/* && \
+    ln -sf /usr/bin/htpasswd /usr/local/bin/htpasswd
 
 
 # Copy config files

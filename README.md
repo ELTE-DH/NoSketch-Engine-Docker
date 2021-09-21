@@ -78,6 +78,8 @@ See [Dockerfile](Dockerfile) for details.
 - `make clean`: stops the container, _removes indexed corpora_ and deletes docker image – __use with caution!__
 - `make create-cert`: create self-signed certificate for Shibboleth (must restart a container to apply)
 - `make remove-cert`: delete self-signed certificate files (must restart a container to apply)
+- `make htpasswd`: generate strong password for htaccess authentication (must restart a container to apply)
+- `make compose`: help filling environment variables for `docker-compose`
 
 ## `make` parameters, multiple images and multiple containers
 
@@ -107,7 +109,7 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 See the table below on which `make` command accepts which parameter:
 
 | command            | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `FORCE_RECOMPILE` | `USERNAME` | `PASSWORD` | The Other Variables |
-|--------------------|:------------:|:----------------:|:------:|:-----------------:|------------|------------|:-------------------:|
+|--------------------|:------------:|:----------------:|:------:|:-----------------:|:----------:|:----------:|:-------------------:|
 | `make pull`        |       ✔      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make build`       |       ✔      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make compile`     |       ✔      |         .        |    .   |         ✔         |      .     |      .     |          .          |
@@ -119,6 +121,7 @@ See the table below on which `make` command accepts which parameter:
 | `make create-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make remove-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make htpasswd`    |       ✔      |         .        |    .   |         .         |      ✔     |      ✔     |          .          |
+| `make compose`     |       ✔      |         ✔        |    ✔   |         .         |      .     |      .     |          ❗          |
 
 - The Other Variables are
     - `CITATION_LINK`
@@ -168,17 +171,18 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
 
 1. Build docker image
 2. Set the environment variables:
+    - `CITATION_LINK` e.g. `export CITATION_LINK="https://github.com/elte-dh/NoSketch-Engine-Docker"`
     - `LETS_ENCRYPT_EMAIL` e.g. `export LETS_ENCRYPT_EMAIL="contact@company.com"`
     - `SERVER_NAME`  e.g. `export SERVER_NAME="https://sketchengine.company.com/"`
     - `SERVER_ALIAS` e.g. `export SERVER_ALIAS="sketchengine.company.com"`
+    - (optional) `IMAGE_NAME`, `PORT` and `CONTAINER_NAME`
     - `PRIVATE_KEY` e.g. `export PRIVATE_KEY="$(cat conf/sp.for.eduid.service.hu-key.crt 2> /dev/null)"`
         or set as empty `export PRIVATE_KEY=""`
     - `PUBLIC_KEY` e.g. `export PUBLIC_KEY="$(cat conf/sp.for.eduid.service.hu-cert.crt 2> /dev/null)"`
         or set as empty `export PUBLIC_KEY=""`
     - `HTACCESS` e.g. `export HTACCESS="$(cat conf/htaccess 2> /dev/null)"` or set as empty `export HTACCESS=""` 
     - `HTPASSWD` e.g. `export HTPASSWD="$(cat conf/htpasswd 2> /dev/null)"` or set as empty `export HTPASSWD=""`
-    - (optional) `IMAGE_NAME`, `PORT` and `CONTAINER_NAME`
-3. `docker-compose up -d`
+3. Run `docker-compose up -d` or use `make comopose` which sets the last four automatically
 
 ## Citation link
 

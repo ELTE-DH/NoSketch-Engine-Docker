@@ -9,6 +9,7 @@ PRIVATE_KEY?=$$(cat conf/sp.for.eduid.service.hu-key.crt 2> /dev/null)
 PUBLIC_KEY?=$$(cat conf/sp.for.eduid.service.hu-cert.crt 2> /dev/null)
 HTACCESS?=$$(cat conf/htaccess 2> /dev/null)
 HTPASSWD?=$$(cat conf/htpasswd 2> /dev/null)
+LETS_ENCRYPT_EMAIL?=dummy@email.com
 
 
 all: build compile run
@@ -85,6 +86,14 @@ execute:
 compile:
 	@make -s execute IMAGE_NAME=$(IMAGE_NAME) FORCE_RECOMPILE=$(FORCE_RECOMPILE) CMD=compile.sh
 .PHONY: compile
+
+
+# docker-compose helper
+compose:
+	IMAGE_NAME=$(IMAGE_NAME) CONTAINER_NAME=$(CONTAINER_NAME) PORT=$(PORT) CITATION_LINK=$(CITATION_LINK) \
+     SERVER_NAME=$(SERVER_NAME) SERVER_ALIAS=$(SERVER_ALIAS)  PRIVATE_KEY=$(PRIVATE_KEY) PUBLIC_KEY=$(PUBLIC_KEY) \
+     HTACCESS=$(HTACCESS) HTPASSWD=$(HTPASSWD) LETS_ENCRYPT_EMAIL=$(LETS_ENCRYPT_EMAIL) \
+     docker-compose up -d
 
 
 # Create a strong htpasswd

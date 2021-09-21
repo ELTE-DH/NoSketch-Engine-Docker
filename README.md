@@ -4,7 +4,7 @@ This is a dockerised version of [NoSketch Engine](https://nlp.fi.muni.cz/trac/no
  the open source version of [Sketch Engine](https://www.sketchengine.eu/) corpus manager and text analysis software
  developed by [Lexical Computing Limited](https://www.lexicalcomputing.com/).
 
-This docker image is based on Debian Buster and
+This docker image is based on Debian 10 Buster and
  [the NoSketch Engine build and installation process](https://nlp.fi.muni.cz/trac/noske#Buildandinstallation) contains
  some additional hacks for convenient install and use.
 See [Dockerfile](Dockerfile) for details.

@@ -51,7 +51,6 @@ RUN cd bonito* && \
     sed -i 's#subc_size = sub.search_size()#subc_size = float(sub.search_size())#' \
         /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
 
-
 ## GDEX
 RUN cd gdex* && \
     python2 setup.py install
@@ -78,7 +77,7 @@ COPY conf/run.cgi /var/www/bonito/run.cgi
 COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY conf/shibboleth2.xml /etc/shibboleth/shibboleth2.xml
 COPY conf/*.crt /etc/shibboleth/
-### These files should be updated if needed (see make update-htaccess)
+### These files should be updated through env variables (HTACCESS,HTPASSWD) as needed
 COPY conf/htaccess /var/www/.htaccess
 COPY conf/htpasswd /var/lib/bonito/htpasswd
 

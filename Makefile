@@ -25,10 +25,13 @@ build:
 # Create self-signed certs for shibboleth
 create-cert:
 	@if [ ! -f conf/sp.for.eduid.service.hu-cert.crt -a ! -f conf/sp.for.eduid.service.hu-key.crt ] ; then \
-		openssl req -new -newkey rsa:2048 -x509 -days 3652 -nodes -out conf/sp.for.eduid.service.hu-cert.crt -keyout conf/sp.for.eduid.service.hu-key.crt ; \
-	else \
-		echo 'At least one of the certfiles (conf/sp.for.eduid.service.hu-cert.crt, conf/sp.for.eduid.service.hu-key.crt) exitst. Delete them (e.g. with make remove-cert) to proceeed!' && exit 1 ; \
-	fi
+        openssl req -new -newkey rsa:2048 -x509 -days 3652 -nodes -out conf/sp.for.eduid.service.hu-cert.crt -keyout \
+         conf/sp.for.eduid.service.hu-key.crt ; \
+    else \
+        echo 'At least one of the certfiles (conf/sp.for.eduid.service.hu-cert.crt, '\
+         'conf/sp.for.eduid.service.hu-key.crt) exitst. Delete them (e.g. with make remove-cert) to proceeed!' \
+         && exit 1 ; \
+    fi
 .PHONY: create-cert
 
 
@@ -42,8 +45,8 @@ remove-cert:
 run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
-		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
-		$(IMAGE_NAME):latest
+     -e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
+     $(IMAGE_NAME):latest
 	@make -s update-htaccess
 	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
@@ -52,10 +55,10 @@ run:
 # Stop running $(CONTAINER_NAME) container
 stop:
 	@if [ "$$(docker container ls -f name=$(CONTAINER_NAME) -q)" ] ; then \
-		docker container stop $(CONTAINER_NAME) ; \
-	else \
-		echo 'no running $(CONTAINER_NAME) container' ; \
-	fi
+        docker container stop $(CONTAINER_NAME) ; \
+    else \
+        echo 'no running $(CONTAINER_NAME) container' ; \
+    fi
 .PHONY: stop
 
 
@@ -67,9 +70,9 @@ connect:
 
 # Execute commmand in CMD variable and set $(SERVER_NAME) & $(SERVER_ALIAS) environment variables for shibboleth
 execute:
-	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora \
-		-e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
- 		$(IMAGE_NAME):latest "$(CMD)"
+	docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora -e FORCE_RECOMPILE=$(FORCE_RECOMPILE) \
+     -e SERVER_NAME=$(SERVER_NAME) -e SERVER_ALIAS=$(SERVER_ALIAS) -e CITATION_LINK=$(CITATION_LINK) \
+     $(IMAGE_NAME):latest "$(CMD)"
 .PHONY: execute
 
 
@@ -82,7 +85,7 @@ update-htaccess:
 
 # Compile all corpora
 compile:
-	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD=compile.sh
+	@make -s execute IMAGE_NAME=$(IMAGE_NAME) FORCE_RECOMPILE=$(FORCE_RECOMPILE) CMD=compile.sh
 .PHONY: compile
 
 

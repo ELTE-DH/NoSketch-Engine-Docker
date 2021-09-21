@@ -14,7 +14,7 @@ See [Dockerfile](Dockerfile) for details.
 1. `git clone https://github.com/ELTE-DH/NoSketch-Engine-Docker.git`
 2. `make pull` – to download the docker image
 3. `make compile` – to compile sample corpora
-4. `make execute` – to run a CLI query on `susanne` corpus
+4. `make execute` – to execute a command in the docker container (runs a test CLI query on `susanne` corpus by default)
 5. `make run` – to launch the docker container
 6. Navigate to `http://localhost:10070/` to try the WebUI
 
@@ -52,8 +52,8 @@ See [Dockerfile](Dockerfile) for details.
    (see examples in [`corpora/registry/susanne`](corpora/registry/susanne)
    and [`corpora/registry/emagyardemo`](corpora/registry/emagyardemo))
 3. Compile all corpora listed in [`corpora/registry`](corpora/registry) directory using the docker image: `make compile`
-    - To compile _one_ corpus at a time, use the following command:
-      `make execute CMD="compilecorp --no-ske CORPUS_REGISTRY_FILE"`
+    - To compile _one_ corpus at a time (overwriting existing files), use the following command:
+      `make execute CMD="compilecorp --no-ske --recompile-corpus CORPUS_REGISTRY_FILE"`
 
 ### 3a. Run the container
 
@@ -83,6 +83,8 @@ By default,
 - the name of the docker image (`IMAGE_NAME`) is `eltedh/nosketch-engine`,
 - the name of the docker container (`CONTAINTER_NAME`) is `noske`,
 - the port number which the docker container uses (`PORT`) is `10070`,
+- the variable to force recompiling already indexed coropra (`FORCE_RECOMPILE`) is not set
+   (empty or not set means false any other value means true),
 - the citation link (`CITATION_LINK`) is `https://github.com/elte-dh/NoSketch-Engine-Docker`,
 - the server name required for Let's Encrypt and/or Shibboleth (`SERVER_NAME`) is `https://sketchengine.company.com/`,
 - the server alias required for Let's Encrypt and/or Shibboleth (`SERVER_ALIAS`) is `sketchengine.company.com`,
@@ -99,19 +101,19 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
-| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `SERVER_NAME` | `SERVER_ALIAS` | `CITATION_LINK` |
-|------------------------|:------------:|:----------------:|:------:|:-------------:|:--------------:|:---------------:|
-| `make pull`            |       ✔      |         .        |    .   |       .       |        .       |        .        |
-| `make build`           |       ✔      |         .        |    .   |       .       |        .       |        .        |
-| `make compile`         |       ✔      |         .        |    .   |       .       |        .       |        .        |
-| `make execute`         |       ✔      |         .        |    .   |       ✔       |        ✔       |        ✔        |
-| `make run`             |       ✔      |         ✔        |    ✔   |       ✔       |        ✔       |        ✔        |
-| `make connect`         |       .      |         ✔        |    .   |       .       |        .       |        .        |
-| `make stop`            |       .      |         ✔        |    .   |       .       |        .       |        .        |
-| `make clean`           |       ✔      |         ✔        |    .   |       .       |        .       |        .        |
-| `make create-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |
-| `make remove-cert`     |       .      |         .        |    .   |       .       |        .       |        .        |
-| `make update-htaccess` |       .      |         ✔        |    .   |       .       |        .       |        .        |
+| command                | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `FORCE_RECOMPILE` | `SERVER_NAME` | `SERVER_ALIAS` | `CITATION_LINK` |
+|------------------------|:------------:|:----------------:|:------:|:-----------------:|:-------------:|:--------------:|:---------------:|
+| `make pull`            |       ✔      |         .        |    .   |         .         |       .       |        .       |        .        |
+| `make build`           |       ✔      |         .        |    .   |         .         |       .       |        .       |        .        |
+| `make compile`         |       ✔      |         .        |    .   |         ✔         |       .       |        .       |        .        |
+| `make execute`         |       ✔      |         .        |    .   |         .         |       ✔       |        ✔       |        ✔        |
+| `make run`             |       ✔      |         ✔        |    ✔   |         ✔         |       ✔       |        ✔       |        ✔        |
+| `make connect`         |       .      |         ✔        |    .   |         .         |       .       |        .       |        .        |
+| `make stop`            |       .      |         ✔        |    .   |         .         |       .       |        .       |        .        |
+| `make clean`           |       ✔      |         ✔        |    .   |         .         |       .       |        .       |        .        |
+| `make create-cert`     |       .      |         .        |    .   |         .         |       .       |        .       |        .        |
+| `make remove-cert`     |       .      |         .        |    .   |         .         |       .       |        .       |        .        |
+| `make update-htaccess` |       .      |         ✔        |    .   |         .         |       .       |        .       |        .        |
 
 `LETS_ENCRYPT_EMAIL` variable is only used in `docker-compose.yml`.
 

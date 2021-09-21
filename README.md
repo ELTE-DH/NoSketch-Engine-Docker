@@ -170,7 +170,13 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
 2. Set the environment variables:
     - `LETS_ENCRYPT_EMAIL` e.g. `export LETS_ENCRYPT_EMAIL="contact@company.com"`
     - `SERVER_NAME`  e.g. `export SERVER_NAME="https://sketchengine.company.com/"`
-    - `SERVER_ALIAS`e.g. `export SERVER_ALIAS="sketchengine.company.com"`
+    - `SERVER_ALIAS` e.g. `export SERVER_ALIAS="sketchengine.company.com"`
+    - `PRIVATE_KEY` e.g. `export PRIVATE_KEY="$(cat conf/sp.for.eduid.service.hu-key.crt 2> /dev/null)"`
+        or set as empty `export PRIVATE_KEY=""`
+    - `PUBLIC_KEY` e.g. `export PUBLIC_KEY="$(cat conf/sp.for.eduid.service.hu-cert.crt 2> /dev/null)"`
+        or set as empty `export PUBLIC_KEY=""`
+    - `HTACCESS` e.g. `export HTACCESS="$(cat conf/htaccess 2> /dev/null)"` or set as empty `export HTACCESS=""` 
+    - `HTPASSWD` e.g. `export HTPASSWD="$(cat conf/htpasswd 2> /dev/null)"` or set as empty `export HTPASSWD=""`
     - (optional) `IMAGE_NAME`, `PORT` and `CONTAINER_NAME`
 3. `docker-compose up -d`
 

@@ -5,10 +5,10 @@ CONTAINER_NAME?=noske
 SERVER_NAME?=https://sketchengine.company.com/
 SERVER_ALIAS?=sketchengine.company.com
 CITATION_LINK?=https://github.com/elte-dh/NoSketch-Engine-Docker
-PRIVATE_KEY?=$$(cat conf/sp.for.eduid.service.hu-key.crt 2> /dev/null)
-PUBLIC_KEY?=$$(cat conf/sp.for.eduid.service.hu-cert.crt 2> /dev/null)
-HTACCESS?=$$(cat conf/htaccess 2> /dev/null)
-HTPASSWD?=$$(cat conf/htpasswd 2> /dev/null)
+PRIVATE_KEY?=$$(cat secrets/sp.for.eduid.service.hu-key.crt 2> /dev/null)
+PUBLIC_KEY?=$$(cat secrets/sp.for.eduid.service.hu-cert.crt 2> /dev/null)
+HTACCESS?=$$(cat secrets/htaccess 2> /dev/null)
+HTPASSWD?=$$(cat secrets/htpasswd 2> /dev/null)
 LETS_ENCRYPT_EMAIL?=dummy@email.com
 
 
@@ -29,19 +29,19 @@ build:
 
 # Create self-signed certs for shibboleth
 create-cert:
-	@if [ ! -f conf/sp.for.eduid.service.hu-cert.crt -a ! -f conf/sp.for.eduid.service.hu-key.crt ] ; then \
-        openssl req -new -newkey rsa:2048 -x509 -days 3652 -nodes -out conf/sp.for.eduid.service.hu-cert.crt -keyout \
-         conf/sp.for.eduid.service.hu-key.crt ; \
+	@if [ ! -f secrets/sp.for.eduid.service.hu-cert.crt -a ! -f secrets/sp.for.eduid.service.hu-key.crt ] ; then \
+        openssl req -new -newkey rsa:2048 -x509 -days 3652 -nodes \
+         -out secrets/sp.for.eduid.service.hu-cert.crt -keyout secrets/sp.for.eduid.service.hu-key.crt ; \
     else \
-        echo 'At least one of the certfiles (conf/sp.for.eduid.service.hu-cert.crt, '\
-         'conf/sp.for.eduid.service.hu-key.crt) exitst. Delete them (e.g. with make remove-cert) to proceeed!' \
+        echo 'At least one of the certfiles (secrets/sp.for.eduid.service.hu-cert.crt, '\
+         'secrets/sp.for.eduid.service.hu-key.crt) exitst. Delete them (e.g. with make remove-cert) to proceeed!' \
          && exit 1 ; \
     fi
 .PHONY: create-cert
 
 
 remove-cert:
-	rm -rf conf/sp.for.eduid.service.hu-cert.crt conf/sp.for.eduid.service.hu-key.crt
+	rm -rf secrets/sp.for.eduid.service.hu-cert.crt secrets/sp.for.eduid.service.hu-key.crt
 .PHONY: remove-cert
 
 
@@ -86,14 +86,6 @@ execute:
 compile:
 	@make -s execute IMAGE_NAME=$(IMAGE_NAME) FORCE_RECOMPILE=$(FORCE_RECOMPILE) CMD=compile.sh
 .PHONY: compile
-
-
-# docker-compose helper
-compose:
-	IMAGE_NAME=$(IMAGE_NAME) CONTAINER_NAME=$(CONTAINER_NAME) PORT=$(PORT) CITATION_LINK=$(CITATION_LINK) \
-     SERVER_NAME=$(SERVER_NAME) SERVER_ALIAS=$(SERVER_ALIAS)  PRIVATE_KEY=$(PRIVATE_KEY) PUBLIC_KEY=$(PUBLIC_KEY) \
-     HTACCESS=$(HTACCESS) HTPASSWD=$(HTPASSWD) LETS_ENCRYPT_EMAIL=$(LETS_ENCRYPT_EMAIL) \
-     docker-compose up -d
 
 
 # Create a strong htpasswd

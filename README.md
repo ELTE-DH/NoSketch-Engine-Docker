@@ -41,7 +41,7 @@ See [Dockerfile](Dockerfile) for details.
 
 - Either pull the prebuilt image from [Dockerhub](https://hub.docker.com/r/eltedh/nosketch-engine): `make pull`
    (or `docker pull eltedh/nosketch-engine:latest`)
-- Or build your own image yourself (the process can take 5 minutes or so): `make build IMAGE_NAME=myimage`– be sure 
+- Or build your own image yourself (the process can take 5 minutes or so): `make build IMAGE_NAME=myimage`– be sure
    to name your image using the `IMAGE_NAME` parameter
 
 ### 2. Compile your corpus
@@ -60,8 +60,10 @@ See [Dockerfile](Dockerfile) for details.
 
 ### 3a. Run the container
 
-1. Run docker container: `make run`
-2. Navigate to `http://SERVER_NAME:10070/` to use
+1. (optional) Customise the environment variables in [`secrets/env.sh`](secrets/env.sh) and _export_ them into
+    the current shell with `source secrets/env.sh`
+2. Run docker container: `make run`
+3. Navigate to `http://SERVER_NAME:10070/` to use
 
 ### 3b. CLI Usage
 
@@ -79,7 +81,6 @@ See [Dockerfile](Dockerfile) for details.
 - `make create-cert`: create self-signed certificate for Shibboleth (must restart a container to apply)
 - `make remove-cert`: delete self-signed certificate files (must restart a container to apply)
 - `make htpasswd`: generate strong password for htaccess authentication (must restart a container to apply)
-- `make compose`: help filling environment variables for `docker-compose`
 
 ## `make` parameters, multiple images and multiple containers
 
@@ -90,13 +91,18 @@ By default,
 - the variable to force recompiling already indexed coropra (`FORCE_RECOMPILE`) is not set
    (_empty_ or _not set_ means _false_ any other value means _true_),
 - the citation link (`CITATION_LINK`) is `https://github.com/elte-dh/NoSketch-Engine-Docker`,
-- the server name required for Let's Encrypt and/or Shibboleth (`SERVER_NAME`) is `https://sketchengine.company.com/`,
-- the server alias required for Let's Encrypt and/or Shibboleth (`SERVER_ALIAS`) is `sketchengine.company.com`,
-- the e-mail address required Let's Encrypt (`LETS_ENCRYPT_EMAIL`) is not set (mandatory for Let's Encrypt),
+- the server name required for Let's Encrypt and/or Shibboleth (`SERVER_NAME`) is `https://sketchengine.company.com/`
+   (mandatory for [`docker-compose.yml`](docker-compose.yml)),
+- the server alias required for Let's Encrypt and/or Shibboleth (`SERVER_ALIAS`) is `sketchengine.company.com`
+   (mandatory for [`docker-compose.yml`](docker-compose.yml)),
+- the e-mail address required Let's Encrypt (`LETS_ENCRYPT_EMAIL`) is not set (mandatory for Let's Encrypt and
+   [`docker-compose.yml`](docker-compose.yml)),
 - the self-signed public and private keys (`PUBLIC_KEY`, `PRIVATE_KEY`) are loaded from
-   ([conf/sp.for.eduid.service.hu-{cert,key}.crt](conf)) or empty if these files do not exist,
+   ([secrets/sp.for.eduid.service.hu-{cert,key}.crt](secrets)) or empty if these files do not exist
+   (mandatory for [`docker-compose.yml`](docker-compose.yml)),
 - the htaccess and htpasswd files (`HTACCESS`, `HTPASSWD`) are loaded from
-   ([conf/{htaccess,htpasswd}](conf)) or empty if these files do not exist.
+   ([secrets/{htaccess,htpasswd}](secrets)) or empty if these files do not exist (mandatory for
+   [`docker-compose.yml`](docker-compose.yml)).
 
 If there is a need to change these, set them as environment variables (e.g. `export IMAGE_NAME=myimage`)
  or supplement `make` commands with the appropriate values (e.g. `make run PORT=8080`).
@@ -121,7 +127,6 @@ See the table below on which `make` command accepts which parameter:
 | `make create-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make remove-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
 | `make htpasswd`    |       ✔      |         .        |    .   |         .         |      ✔     |      ✔     |          .          |
-| `make compose`     |       ✔      |         ✔        |    ✔   |         .         |      .     |      .     |          ❗          |
 
 - The Other Variables are
     - `CITATION_LINK`
@@ -139,16 +144,20 @@ If you want to build your own docker image be sure to include the `IMAGE_NAME` p
  `make build IMAGE_NAME=myimage` and also provide `IMAGE_NAME=myimage` for every `make` command
  which accepts this parameter.
 
+A convenient solution for managing many environment variables in an easy and reproducible way
+ (e.g. for [`docker-compose.yml`](docker-compose.yml)) is to customise and source [`secrets/env.sh`](secrets/env.sh)
+ before running the actual command: `source secrets/env.sh; docker-compose up -d` or `source secrets/env.sh; make run`
+
 ## Authentication
 
 Two types of authentication is supported basic auth and Shibboleth
 
 ### Basic auth
 
-1. Uncomment relevant config lines in [`conf/htaccess`](conf/htaccess) and set user and password in
-    [`conf/htpasswd`](conf/htpasswd)
-    (e.g. use `make htpasswd USERNAME="USERNAME" PASSWORD="PASSWD" >> conf/htpasswd` shortcut 
-    or `htpasswd` from `apache2-utils` package)
+1. Uncomment relevant config lines in [`secrets/htaccess`](secrets/htaccess) and set user and password in
+    [`secrets/htpasswd`](secrets/htpasswd)
+    (e.g. use `make htpasswd USERNAME="USERNAME" PASSWORD="PASSWD" >> secrets/htpasswd` shortcut
+    for running `htpasswd` from `apache2-utils` package inside docker)
 2. [Run or restart the container to apply](#3a-run-the-container) or
     [(re)build your custom image](#1-get-the-docker-image)
 
@@ -161,33 +170,36 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
     - `SERVER_ALIAS`e.g. `export SERVER_ALIAS="sketchengine.company.com"`
 2. Obtain a self-sgined certificate:
     - `make create-cert` to create a new certificate
-    - Or put your files to conf/sp.for.eduid.service.hu-cert.crt and conf/sp.for.eduid.service.hu-key.crt with
-       appropriate permissions (`chmod 644 conf/sp.for.eduid.service.hu-cert.crt conf/sp.for.eduid.service.hu-key.crt`)
-3. Build docker image
-4.  [Setup HTTPS](https-with-lets-encrypt)
-5.  Register your SP with your IdP
+    - Or put your files to `secrets/sp.for.eduid.service.hu-cert.crt` and `secrets/sp.for.eduid.service.hu-key.crt` with
+       appropriate permissions (`chmod 644 secrets/sp.for.eduid.service.hu-cert.crt
+       secrets/sp.for.eduid.service.hu-key.crt`)
+3. [Setup HTTPS](https-with-lets-encrypt)
+4. [Run or restart the container to apply](#3a-run-the-container) or
+    [(re)build your custom image](#1-get-the-docker-image) after uncommenting the relevant lines at the end of
+    [`Dockerfile`](Dockerfile)
+5. Register your SP with your IdP
 
 ## HTTPS with Let's Encrypt
 
-1. Build docker image
-2. Set the environment variables:
+1. Set (`export`) the environment variables (or set them in [`secrets/env.sh`](secrets/env.sh) and
+    `source secrets/env.sh`):
     - `CITATION_LINK` e.g. `export CITATION_LINK="https://github.com/elte-dh/NoSketch-Engine-Docker"`
     - `LETS_ENCRYPT_EMAIL` e.g. `export LETS_ENCRYPT_EMAIL="contact@company.com"`
     - `SERVER_NAME`  e.g. `export SERVER_NAME="https://sketchengine.company.com/"`
     - `SERVER_ALIAS` e.g. `export SERVER_ALIAS="sketchengine.company.com"`
     - (optional) `IMAGE_NAME`, `PORT` and `CONTAINER_NAME`
-    - `PRIVATE_KEY` e.g. `export PRIVATE_KEY="$(cat conf/sp.for.eduid.service.hu-key.crt 2> /dev/null)"`
+    - `PRIVATE_KEY` e.g. `export PRIVATE_KEY="$(cat secrets/sp.for.eduid.service.hu-key.crt 2> /dev/null)"`
         or set as empty `export PRIVATE_KEY=""`
-    - `PUBLIC_KEY` e.g. `export PUBLIC_KEY="$(cat conf/sp.for.eduid.service.hu-cert.crt 2> /dev/null)"`
+    - `PUBLIC_KEY` e.g. `export PUBLIC_KEY="$(cat secrets/sp.for.eduid.service.hu-cert.crt 2> /dev/null)"`
         or set as empty `export PUBLIC_KEY=""`
-    - `HTACCESS` e.g. `export HTACCESS="$(cat conf/htaccess 2> /dev/null)"` or set as empty `export HTACCESS=""` 
-    - `HTPASSWD` e.g. `export HTPASSWD="$(cat conf/htpasswd 2> /dev/null)"` or set as empty `export HTPASSWD=""`
-3. Run `docker-compose up -d` or use `make comopose` which sets the last four automatically
+    - `HTACCESS` e.g. `export HTACCESS="$(cat secrets/htaccess 2> /dev/null)"` or set as empty `export HTACCESS=""`
+    - `HTPASSWD` e.g. `export HTPASSWD="$(cat secrets/htpasswd 2> /dev/null)"` or set as empty `export HTPASSWD=""`
+3. Run `docker-compose up -d`
 
 ## Citation link
 
 You can set a link to your publications which you require to cite.
-Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in [docker-compose.yml](docker-compose.yml).
+Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in [`secrets/env.sh`](secrets/env.sh).
 
 The link is displayed in the lower-right corner of the main dashboard if any type of authentication is set.
 

@@ -18,18 +18,18 @@ if [ $# -eq 1 ]; then
     sed -i "s#SERVER_NAME_PLACEHOLDER#${SERVER_NAME}#" /etc/shibboleth/shibboleth2.xml
     sed -i "s#CITATION_LINK_PLACEHOLDER#${CITATION_LINK}#" /var/www/crystal/bundle.js
     # ENV variable takes precedence
-    if [[ -n "${PRIVATE_KEY}" ]] || [[ ! -f "/etc/shibboleth/sp.for.eduid.service.hu-key.crt" ]]; then
+    if [[ -n "${PRIVATE_KEY}" ]] || [[ ! -s "/etc/shibboleth/sp.for.eduid.service.hu-key.crt" ]]; then
         echo "${PRIVATE_KEY}" > /etc/shibboleth/sp.for.eduid.service.hu-key.crt
     fi
     chmod 644 /etc/shibboleth/sp.for.eduid.service.hu-key.crt
-    if [[ -n "${PUBLIC_KEY}" ]] || [[ ! -f "/etc/shibboleth/sp.for.eduid.service.hu-cert.crt" ]]; then
+    if [[ -n "${PUBLIC_KEY}" ]] || [[ ! -s "/etc/shibboleth/sp.for.eduid.service.hu-cert.crt" ]]; then
         echo "${PUBLIC_KEY}" > /etc/shibboleth/sp.for.eduid.service.hu-cert.crt
     fi
     chmod 644 /etc/shibboleth/sp.for.eduid.service.hu-cert.crt
-    if [[ -n "${HTACCESS}" ]] || [[ ! -f "/var/www/.htaccess" ]]; then
+    if [[ -n "${HTACCESS}" ]] || [[ ! -s "/var/www/.htaccess" ]]; then
         echo "${HTACCESS}" > /var/www/.htaccess
     fi
-    if [[ -n "${HTPASSWD}" ]] || [[ ! -f "/var/lib/bonito/htpasswd" ]]; then
+    if [[ -n "${HTPASSWD}" ]] || [[ ! -s "/var/lib/bonito/htpasswd" ]]; then
         echo "${HTPASSWD}" > /var/lib/bonito/htpasswd
     fi
     # Must be started after apache (only if cert and key are not empty)

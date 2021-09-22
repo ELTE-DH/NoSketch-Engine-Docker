@@ -72,16 +72,18 @@ RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/* && \
     ln -sf /usr/bin/htpasswd /usr/local/bin/htpasswd
 
 
-# Copy config files
+# Copy config files (These files contain placeholders replaced in entrypoint.sh according to environment variables)
 COPY conf/*.sh /usr/local/bin/
 COPY conf/run.cgi /var/www/bonito/run.cgi
 COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY conf/shibboleth2.xml /etc/shibboleth/shibboleth2.xml
 COPY conf/*.crt /etc/shibboleth/
-### These files should be updated through env variables (HTACCESS,HTPASSWD) as needed
-COPY conf/htaccess /var/www/.htaccess
-COPY conf/htpasswd /var/lib/bonito/htpasswd
 
+### These files should be updated through environment variables (HTACCESS,HTPASSWD,PUBLIC_KEY,PRIVATE_KEY)
+# but uncommenting the lines below enable creation of a custom image with secrets included
+# COPY secrets/htaccess /var/www/.htaccess
+# COPY secrets/htpasswd /var/lib/bonito/htpasswd
+# COPY secrets/*.crt /etc/shibboleth/
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

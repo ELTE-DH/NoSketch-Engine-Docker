@@ -93,7 +93,7 @@ compile:
 
 # Create a strong password with htpasswd command inside the docker image
 htpasswd:
-	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD="htpasswd -nbB \"$(USER)\" \"$(PASSWORD)\""
+	@make -s execute IMAGE_NAME=$(IMAGE_NAME) CMD="htpasswd -nbB \"$(USERNAME)\" \"$(PASSWORD)\""
 
 
 # Stop container, remove image, remove compiled corpora

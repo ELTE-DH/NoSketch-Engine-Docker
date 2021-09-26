@@ -121,19 +121,19 @@ In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
-| command            | `IMAGE_NAME` | `CONTAINER_NAME` | `PORT` | `FORCE_RECOMPILE` | `USERNAME` | `PASSWORD` | The Other Variables |
-|--------------------|:------------:|:----------------:|:------:|:-----------------:|:----------:|:----------:|:-------------------:|
-| `make pull`        |       ✔      |         .        |    .   |         .         |      .     |      .     |          .          |
-| `make build`       |       ✔      |         .        |    .   |         .         |      .     |      .     |          .          |
-| `make compile`     |       ✔      |         .        |    .   |         ✔         |      .     |      .     |          .          |
-| `make execute`     |       ✔      |         .        |    .   |         ✔         |      .     |      .     |          ✔          |
-| `make run`         |       ✔      |         ✔        |    ✔   |         .         |      .     |      .     |          ✔          |
-| `make connect`     |       .      |         ✔        |    .   |         .         |      .     |      .     |          .          |
-| `make stop`        |       .      |         ✔        |    .   |         .         |      .     |      .     |          .          |
-| `make clean`       |       ✔      |         ✔        |    .   |         .         |      .     |      .     |          .          |
-| `make create-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
-| `make remove-cert` |       .      |         .        |    .   |         .         |      .     |      .     |          .          |
-| `make htpasswd`    |       ✔      |         .        |    .   |         .         |      ✔     |      ✔     |          .          |
+| command            | `IMAGE_NAME` | `CONTAINER_NAME` | `CORPORA_DIR` | `PORT` | `FORCE_RECOMPILE` | `USERNAME` | `PASSWORD` | The Other Variables |
+|--------------------|:------------:|:----------------:|:-------------:|:------:|:-----------------:|:----------:|:----------:|:-------------------:|
+| `make pull`        |       ✔      |         .        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make build`       |       ✔      |         .        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make compile`     |       ✔      |         .        |       .       |    .   |         ✔         |      .     |      .     |          .          |
+| `make execute`     |       ✔      |         .        |       ✔       |    .   |         ✔         |      .     |      .     |          ✔          |
+| `make run`         |       ✔      |         ✔        |       ✔       |    ✔   |         .         |      .     |      .     |          ✔          |
+| `make connect`     |       .      |         ✔        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make stop`        |       .      |         ✔        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make clean`       |       ✔      |         ✔        |       ✔       |    .   |         .         |      .     |      .     |          .          |
+| `make create-cert` |       .      |         .        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make remove-cert` |       .      |         .        |       .       |    .   |         .         |      .     |      .     |          .          |
+| `make htpasswd`    |       ✔      |         .        |       .       |    .   |         .         |      ✔     |      ✔     |          .          |
 
 - The Other Variables are
     - `CITATION_LINK`
@@ -165,7 +165,7 @@ Two types of authentication is supported: _basic auth_ and _Shibboleth_
 ### Basic auth
 
 1. Copy and uncomment relevant config lines from [`secrets/htaccess.template`](secrets/htaccess.template) into
-    `secrets/htaccess` and set user and password in `secrets/htpasswd`
+    `secrets/htaccess` and set username and password in `secrets/htpasswd`
     (e.g. use `make htpasswd USERNAME="USERNAME" PASSWORD="PASSWD" >> secrets/htpasswd` shortcut
     for running `htpasswd` from `apache2-utils` package inside docker)
 2. [Run or restart the container to apply](#3a-run-the-container) or

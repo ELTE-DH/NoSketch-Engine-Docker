@@ -1,4 +1,4 @@
-# From official stable-slim debian pinned by its name
+# From official Debian 10 Buster image pinned by its name buster-slim
 FROM debian:buster-slim
 
 
@@ -67,7 +67,7 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
         /var/www/crystal/config.js
 
 
-# Remove unnecessary files and create symlinks for utility commands
+# Remove unnecessary files and create symlink for utility command
 RUN rm -rf /var/www/bonito/.htaccess /tmp/noske_files/* && \
     ln -sf /usr/bin/htpasswd /usr/local/bin/htpasswd
 

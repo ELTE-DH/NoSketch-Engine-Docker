@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# If no params start the server,
+# If no params then start the server,
 # else run the specified command from /usr/local/bin
 if [ $# -eq 1 ]; then
     # Shibboleth requires these to be set properly!
@@ -17,7 +17,7 @@ if [ $# -eq 1 ]; then
     sed -i "s#SERVER_ALIAS_PLACEHOLDER#${SERVER_ALIAS}#" /etc/apache2/sites-enabled/000-default.conf
     sed -i "s#SERVER_NAME_PLACEHOLDER#${SERVER_NAME}#" /etc/shibboleth/shibboleth2.xml
     sed -i "s#CITATION_LINK_PLACEHOLDER#${CITATION_LINK}#" /var/www/crystal/bundle.js
-    # ENV variable takes precedence
+    # ENV variables take precedence
     if [[ -n "${PRIVATE_KEY}" ]] || [[ ! -s "/etc/shibboleth/sp.for.eduid.service.hu-key.crt" ]]; then
         echo "${PRIVATE_KEY}" > /etc/shibboleth/sp.for.eduid.service.hu-key.crt
     fi
@@ -34,7 +34,7 @@ if [ $# -eq 1 ]; then
     fi
     # Must be started after apache (only if cert and key are not empty)
     if [[ -s "/etc/shibboleth/sp.for.eduid.service.hu-cert.crt" ]]; then
-        (sleep 5 && service shibd start && echo 'Shibd started.') &
+        (sleep 5 && service shibd start && echo 'Shibd started.' || exit 1) &
     fi
     /usr/sbin/apache2ctl -D FOREGROUND
 else

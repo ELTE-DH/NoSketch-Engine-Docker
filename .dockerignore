@@ -1,10 +1,5 @@
-corpora/
-.git/
-letsencrypt/
-Dockerfile
-LICENSE
-Makefile
-README.md
-.dockerignore
-.gitignore
-.idea/
+# Exclude everything except the explicitly enabled files
+*
+!conf/
+!noske_files/
+!secrets/

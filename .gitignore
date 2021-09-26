@@ -8,9 +8,12 @@ corpora/*
 # Compiled corpora
 corpora/**/indexed/*
 
-# Certificates specific to deployment (the private key should not be published)
+# Secrets specific to deployment (e.g. the private key should not be published)
 secrets/sp.for.eduid.service.hu-cert.crt
 secrets/sp.for.eduid.service.hu-key.crt
+secrets/htaccess
+secrets/htpasswd
+secrets/env.sh
 
 # Let's encrypt's certificate cache
 letsencrypt/

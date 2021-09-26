@@ -37,7 +37,7 @@ services:
       HTPASSWD: "${HTPASSWD? Please use export HTACCESS=$(cat secrets/htpasswd) or set it as empty!}"
     volumes:
       - type: bind
-        source: ./corpora
+        source: "${CORPORA_DIR:? Please set CORPORA_DIR environment variable!}"
         target: /corpora
     labels:
       - "traefik.enable=true"

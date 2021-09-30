@@ -1,0 +1,70 @@
+MAINTAINER "indig.balazs@btk.elte.hu"
+INFO "Webcorpus 2.0"
+NAME "Webcorpus 2.0"
+PATH webcorpus
+ENCODING "UTF-8"
+LANGUAGE "Hungarian"
+
+PATH "/corpora/webcorpus/indexed/"
+# Do not use * globbing to stabilise the ordering of files
+VERTICAL "| zcat /corpora/webcorpus/vertical/ske_2017_2018_{0001..3697}.tsv.gz /corpora/webcorpus/vertical/ske_2019_{0001..0600}.tsv.gz /corpora/webcorpus/vertical/ske_wiki_{0001..0168}.tsv.gz"
+
+INFOHREF "https://hlt.bme.hu/hu/resources/webcorpus2"
+TAGSETDOC "https://e-magyar.hu/hu/textmodules/emmorph_codelist"
+
+ATTRIBUTE word {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE lemma {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE tag {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE lc {
+    LABEL      "word (lowercase)"
+    DYNAMIC    utf8lowercase
+    DYNLIB     internal
+    ARG1       "C"
+    FUNTYPE    s
+    FROMATTR   word
+    TYPE       index
+    TRANSQUERY yes
+}
+
+ATTRIBUTE lemma_lc {
+    LABEL      "lemma (lowercase)"
+    DYNAMIC    utf8lowercase
+    DYNLIB     internal
+    ARG1       "C"
+    FUNTYPE    s
+    FROMATTR   lemma
+    TYPE       index
+    TRANSQUERY yes
+}
+
+STRUCTURE doc {
+    ATTRIBUTE "id"
+    ATTRIBUTE "name"
+    ATTRIBUTE "domain"
+    TYPE      "file64"
+    ATTRIBUTE "wordcount"
+}
+
+STRUCTURE p {
+    ATTRIBUTE "id"
+    TYPE "file64"
+}
+
+STRUCTURE s {
+    TYPE "file64"
+}
+
+STRUCTURE g {
+    DISPLAYTAG   0
+    DISPLAYBEGIN "_EMPTY_"
+    TYPE         "file64"
+}

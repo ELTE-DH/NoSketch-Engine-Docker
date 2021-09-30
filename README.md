@@ -23,7 +23,7 @@ See [Dockerfile](Dockerfile) for details.
 
 - Easy to add corpora (just add vertical file and registry file to the appropriate location,
    and compile the corpus with one command)
-- CLI commands can be used directly (outside of the docker image)
+- CLI commands can be used directly (outside the docker image)
 - Works on any domain without changing configuration (without HTTPS and Shibboleth)
 - Two example corpora included: [`susanne`](corpora/susanne)
    ([original NoSkE sample corpus](https://corpora.fi.muni.cz/noske/current/src/susanne-example-source.tar.bz2))
@@ -34,6 +34,8 @@ See [Dockerfile](Dockerfile) for details.
 
 [Further info](corpora/emagyardemo/vertical/README.md) on how to analyse a plain text corpus by
  [e-magyar](https://github.com/nytud/emtsv) and convert it to the right format suitable to fit in the system.
+
+Corpus configuration recipes to aid compilation of large corpora can be found [here](examples/README.md).
 
 ## Usage
 
@@ -95,7 +97,7 @@ By default,
 - the name of the docker container (`CONTAINTER_NAME`) is `noske`,
 - the directory where the corpora are stored (`CORPORA_DIR`) is `$(pwd)/corpora`,
 - the port number which the docker container uses (`PORT`) is `10070`,
-- the variable to force recompiling already indexed coropra (`FORCE_RECOMPILE`) is not set
+- the variable to force recompiling already indexed corpora (`FORCE_RECOMPILE`) is not set
    (_empty_ or _not set_ means _false_ any other non-zero length value means _true_),
 - the citation link (`CITATION_LINK`) is `https://github.com/elte-dh/NoSketch-Engine-Docker`,
 - the server name required for Let's Encrypt and/or Shibboleth (`SERVER_NAME`) is `https://sketchengine.company.com/`
@@ -117,7 +119,7 @@ If there is a need to change these, set them as environment variables (e.g. `exp
 E.g. `export IMAGE_NAME=myimage; make build` build an image called `myimage`; and
 `make run IMAGE_NAME=myimage CONTAINER_NAME=mycontainer PORT=12345` launches the image called `myimage` in a container
  called `mycontainer` which will use port `12345`.
-In the latter case the system will be availabe at `http://SERVER_NAME:12345/`.
+In the latter case the system will be available at `http://SERVER_NAME:12345/`.
 
 See the table below on which `make` command accepts which parameter:
 
@@ -178,7 +180,7 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
 1. Set the following environment variables:
     - `SERVER_NAME`  e.g. `export SERVER_NAME="https://sketchengine.company.com/"`
     - `SERVER_ALIAS`e.g. `export SERVER_ALIAS="sketchengine.company.com"`
-2. Obtain a self-sgined certificate:
+2. Obtain a self-signed certificate:
     - `make create-cert` to create a new certificate
     - Or put your files to `secrets/sp.for.eduid.service.hu-cert.crt` and `secrets/sp.for.eduid.service.hu-key.crt` with
        appropriate permissions (`chmod 644 secrets/sp.for.eduid.service.hu-cert.crt
@@ -209,7 +211,7 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
 
 ## Citation link
 
-You can set a link to your publications which you require to cite.
+You can set a link to your publications which you require users to cite.
 Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in `secrets/env.sh`
  (see [`secrets/env.sh.template`](secrets/env.sh.template) for example).
 

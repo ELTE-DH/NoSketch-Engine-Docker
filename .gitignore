@@ -18,5 +18,9 @@ secrets/env.sh
 # Let's encrypt's certificate cache
 letsencrypt/
 
+# Large temp files in examples
+examples/webcorpus_orig
+examples/webcorpus_ske
+
 # PyCharm
 .idea/

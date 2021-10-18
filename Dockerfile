@@ -53,6 +53,7 @@ RUN cd bonito* && \
 
 ## GDEX
 RUN cd gdex* && \
+    pip install pyyaml && \
     python2 setup.py install
 
 ## Crystal

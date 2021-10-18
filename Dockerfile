@@ -49,7 +49,8 @@ RUN cd bonito* && \
     sed -i 's#wtr = int(words) / float(tokens)#wtr = float(words) / float(tokens)#' \
         /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py && \
     sed -i 's#subc_size = sub.search_size()#subc_size = float(sub.search_size())#' \
-        /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
+        /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py && \
+    touch /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
 
 ## GDEX
 RUN cd gdex* && \

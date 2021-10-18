@@ -6,11 +6,6 @@ CORPORA_DIR?=$$(pwd)/corpora
 SERVER_NAME?=https://sketchengine.company.com/
 SERVER_ALIAS?=sketchengine.company.com
 CITATION_LINK?=https://github.com/elte-dh/NoSketch-Engine-Docker
-PRIVATE_KEY?=$$(cat secrets/sp.for.eduid.service.hu-key.crt 2> /dev/null)
-PUBLIC_KEY?=$$(cat secrets/sp.for.eduid.service.hu-cert.crt 2> /dev/null)
-HTACCESS?=$$(cat secrets/htaccess 2> /dev/null)
-HTPASSWD?=$$(cat secrets/htpasswd 2> /dev/null)
-LETS_ENCRYPT_EMAIL?=dummy@email.com
 
 
 all: build compile run
@@ -54,7 +49,6 @@ run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$(CORPORA_DIR),dst=/corpora \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
-     -e PRIVATE_KEY="$(PRIVATE_KEY)" -e PUBLIC_KEY="$(PUBLIC_KEY)" -e HTACCESS="$(HTACCESS)" -e HTPASSWD="$(HTPASSWD)" \
      $(IMAGE_NAME):latest
 	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
@@ -80,7 +74,6 @@ connect:
 execute:
 	docker run --rm -it --mount type=bind,src=$(CORPORA_DIR),dst=/corpora -e FORCE_RECOMPILE="$(FORCE_RECOMPILE)" \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
-     -e PRIVATE_KEY="$(PRIVATE_KEY)" -e PUBLIC_KEY="$(PUBLIC_KEY)" -e HTACCESS="$(HTACCESS)" -e HTPASSWD="$(HTPASSWD)" \
      $(IMAGE_NAME):latest "$(CMD)"
 .PHONY: execute
 

@@ -69,18 +69,10 @@
         <MetadataProvider type="XML" validate="true" path="partner-metadata.xml"/>
         -->
         <MetadataProvider type="Chaining">
-            <MetadataProvider type="XML" id="href-2011" url="https://metadata.eduid.hu/2011/href.xml" backingFilePath="href-2011.xml">
-                <MetadataFilter type="Signature" certificate="href-metadata-signer-2011.crt"/>
-                <MetadataFilter type="RequireValidUntil" maxValidityInterval="864000"/>
-            </MetadataProvider>
             <MetadataProvider type="XML" id="href-2020" url="https://metadata.eduid.hu/2020/href.xml" backingFilePath="href-2020.xml">
                 <MetadataFilter type="Signature" certificate="href-metadata-signer-2020.crt"/>
                 <MetadataFilter type="RequireValidUntil" maxValidityInterval="864000"/>
             </MetadataProvider>
-        </MetadataProvider>
-        <MetadataProvider type="MDQ" id="href-2015" ignoreTransport="true" baseUrl="https://mdx-2015.eduid.hu/">
-            <MetadataFilter type="Signature" certificate="mdx-test-signer-2015.crt"/>
-            <MetadataFilter type="RequireValidUntil" maxValidityInterval="864000"/>
         </MetadataProvider>
         <MetadataProvider type="MDQ" id="href-2020" ignoreTransport="true" baseUrl="https://mdx-2020.eduid.hu/">
             <MetadataFilter type="Signature" certificate="href-metadata-signer-2020.crt"/>

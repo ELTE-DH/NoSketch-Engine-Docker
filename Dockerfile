@@ -1,5 +1,5 @@
 # From official Debian 10 Buster image pinned by its name buster-slim
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 
 # Install noske dependencies
@@ -12,15 +12,10 @@ RUN apt-get update && \
         libltdl-dev \
         libpcre++-dev \
         libsass-dev \
-        python-cheetah \
-        python-dev \
-        python-pip \
-        python-setuptools \
-        python-simplejson \
+        python3-dev \
+        python3-setuptools \
+        file \
         swig
-
-## python packages
-RUN pip install signalfd
 
 
 # Enable apache CGI and mod_rewrite
@@ -33,10 +28,9 @@ WORKDIR /tmp/noske_files/
 
 ## Manatee
 RUN cd manatee* && \
-    ./configure PYTHON=python2 --with-pcre && \
+    ./configure --with-pcre && \
     make && \
-    make install && \
-    ldconfig
+    make install
 
 ## Bonito
 ### HACK1: patch conccgi.py to handle large corpora
@@ -45,17 +39,13 @@ RUN cd bonito* && \
     make && \
     make install && \
     ./setupbonito /var/www/bonito /var/lib/bonito && \
-    chown -R www-data:www-data /var/lib/bonito && \
-    sed -i 's#wtr = int(words) / float(tokens)#wtr = float(words) / float(tokens)#' \
-        /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py && \
-    sed -i 's#subc_size = sub.search_size()#subc_size = float(sub.search_size())#' \
-        /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py && \
-    touch /usr/local/lib/python2.7/dist-packages/bonito/conccgi.py
+    chown -R www-data:www-data /var/lib/bonito
 
 ## GDEX
 RUN cd gdex* && \
-    pip install pyyaml && \
-    python2 setup.py install
+    sed -i "s/<version>/4.12/g" setup.py && \
+    ./setup.py build && \
+    ./setup.py install
 
 ## Crystal
 ### HACK2: Modify npm install command in Makefile to handle "permission denied"
@@ -64,8 +54,10 @@ RUN cd gdex* && \
 COPY conf/page-dashboard.tag /tmp/noske_files/
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
     cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
-    make -C crystal*/ install SHELL=/bin/bash && \
-    sed -i 's|URL_BONITO: "https://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
+    cd crystal-* && \
+    make && \
+    make install VERSION=2.107 && \
+    sed -i 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
         /var/www/crystal/config.js
 
 

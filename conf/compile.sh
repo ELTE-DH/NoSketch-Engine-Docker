@@ -17,6 +17,7 @@ if [[ -n "$(ls /corpora/*/indexed 2> /dev/null)" ]]; then
 fi
 
 # Compile corpora
+export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.9/site-packages
 for CORP_FILE in /corpora/registry/*; do
     echo "Running: compilecorp --no-ske --recompile-corpus ${CORP_FILE}" >&2;
     compilecorp --no-ske --recompile-corpus ${CORP_FILE} || exit $?;

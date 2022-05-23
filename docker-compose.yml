@@ -36,7 +36,7 @@ services:
       PRIVATE_KEY: "${PRIVATE_KEY? Please use export PRIVATE_KEY=$(cat secrets/sp.for.eduid.service.hu-key.crt) or set it as empty!}"
       PUBLIC_KEY: "${PUBLIC_KEY? Please use export PUBLIC_KEY=$(cat secrets/sp.for.eduid.service.hu-cert.crt) or set it as empty!}"
       HTACCESS: "${HTACCESS? Please use export HTACCESS=$(cat secrets/htaccess) or set it as empty!}"
-      HTPASSWD: "${HTPASSWD? Please use export HTACCESS=$(cat secrets/htpasswd) or set it as empty!}"
+      HTPASSWD: "${HTPASSWD? Please use export HTPASSWD=$(cat secrets/htpasswd) or set it as empty!}"
     volumes:
       - type: bind
         source: "${CORPORA_DIR:? Please set CORPORA_DIR environment variable!}"

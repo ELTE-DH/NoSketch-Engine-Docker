@@ -1,16 +1,13 @@
 <features-tab-history class="card-content">
-    <result-list section="history"></result-list>
+    <result-list></result-list>
 </features-tab-history >
 
-<features-tab-favourites class="card-content">
-    <result-list section="favourites"></result-list>
-</features-tab-favourites>
-
 <features-tab-annotations class="card-content">
-    <result-list section="annotations"></result-list>
+    <a href="#annotation?corpname={window.stores.app.data.corpus ? window.stores.app.data.corpus.corpname : ""}"
+            class="btn">{_("an.manageAnnotations")}</a>
 </features-tab-annotations>
 
-<page-dashboard class="page-dashboard {bannerExpanded: bannerExpanded}">
+<page-dashboard class="page-dashboard {bannerExpanded: bannerExpanded} {noBanner: hideBanner}">
     <div class="row {isAnonymous: !isFullAccount}">
         <div class="col xl7 l6 m12 s12">
             <div class="card dashboardCard corpusCard">
@@ -22,35 +19,36 @@
                             </span>
                             <div class="buttons center-align">
                                 <a href="javascript:void(0);"
+                                        id="btnCorpusInfo"
                                         class="white-text btn"
                                         onclick={SkE.showCorpusInfo.bind(null, corpus.corpname)}>
                                     {_("corpusInfo")}
                                 </a>
                                 <a if={window.permissions.ca}
+                                        id="btnManageCorpus"
                                         href="#ca"
                                         class="white-text btn tooltipped"
                                         data-tooltip={_("db.menuTip")}>
                                     {_("manageCorpus")}
-                                </a>
-                                <a href={window.config.URL_SKEMA + "?corpname=" + corpus.corpname}
-                                        if={agroup && window.config.URL_SKEMA}
-                                        target="_blank"
-                                        class="btn">{_("skema")}
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="row" if={ready}>
                         <div class="col xl6 l12 m6 s12 {show-on-xlarge-only: !item.active}" each={item in items} >
-                            <a href={item.active ? ("#" + item.page) : ""} id="dashboard_btn{item.id}" class="text-primary" onclick={onCardClick}>
-                                <div class={getClasses(item)} data-tooltip={item.active ? null : _("db.featureNotAvailable")}>
-                                    <i class="ske-icons {getFeatureIcon(item.id)} small"></i>
+                            <a href={item.active && !item.oct ? ("#" + item.page + (item.query || "")) : ""}
+                                    id="dashboard_btn{item.id}"
+                                    class="text-primary"
+                                    onclick={onCardClick}>
+                                <div class={getClasses(item)}
+                                        data-tooltip={item.active ? null : (item.tooltip ? item.tooltip : _("db.featureNotAvailable"))}>
+                                    <i class="{item.iconClass || 'ske-icons'} {getFeatureIcon(item.id)} small">{item.icon}</i>
                                     <div class="card-content">
                                         <div class="featureName">
-                                            {getFeatureLabel(item.id)}
+                                            {item.name || getFeatureLabel(item.id)}
                                         </div>
                                         <div class="featureDesc">
-                                            {_("db." + item.id + "Desc")}
+                                            {item.desc || _("db." + item.id + "Desc")}
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +91,7 @@
                                  <h4>{_("ca.compilation_failed")}</h4>
                                 <div class="note">{_("ca.compilation_failedDesc")}</div>
                                 <br>
-                                <a href="#ca-compile" class="btn white-text contrast">{_("compile")}</a>
+                                <a href="#ca-compile" class="btn white-text btn-primary">{_("compile")}</a>
                             </virtual>
                         </virtual>
                     </div>
@@ -118,7 +116,15 @@
                 </div>
             </div>
 
-            <div class="banner bigBanner center-align">
+            <div if={!hideBanner}
+                    class="banner center-align">
+                <img src="images/boot_camp.png" width="200" loading="lazy">
+                <div class="mb-3"> An online course in using Sketch Engine. Registration open!</div>
+                <a href="https://www.sketchengine.eu/bootcamp/boot-camp-online/"
+                        class="btn"
+                        target="_blank">Registration</a>
+            </div>
+            <!--div class="banner bigBanner center-align">
                 <a class="btn btn-floating btn-flat right" onClick={onBannerToggleClick}>
                     <i class="material-icons bigBanner">keyboard_arrow_up</i>
                 </a>
@@ -133,12 +139,12 @@
                 <a class="btn btn-floating btn-flat right">
                     <i class="material-icons smallBanner">keyboard_arrow_down</i>
                 </a>
-                <h5>The service is for non-profit scientific purposes only</h5>
-                <div>Read further for citing info</div>
-            </div>
+                <h5>Master the interface in 2 days!</h5>
+                <div>March & April 2020</div>
+            </div-->
         </div>
         <div class="col s12" if={isFullAccount}>
-            <div class="card dashboardCard">
+            <div class="card dashboardCard history">
                 <ui-tabs tabs={tabs} name="tabs-history"></ui-tabs>
             </div>
         </div>
@@ -150,86 +156,89 @@
         require("./corpus-history.tag")
         require("./result-list.tag")
         const {AppStore} = require("core/AppStore.js")
-        const {Router} = require("core/Router.js")
+        const {Url} = require("core/url.js")
         const {Auth} = require("core/Auth.js")
 
         this.mixin("tooltip-mixin")
 
         this.isFullAccount = Auth.isFullAccount()
         this.bannerExpanded = false
-        this.agroup = Auth.getAnnotationGroup()
+        this.hideBanner = window.config.HIDE_DASHBOARD_BANNER
+
 
         _updateItems() {
             this.corpus = AppStore.get("corpus")
             this.ready = AppStore.get("ready")
+            let wlattr = AppStore.getFirstWlattr()
             let features = AppStore.get("features")
             let p = window.permissions
             this.items = [
                 {
                     page: "wordsketch",
-                    desc: "db.wordSketchDesc",
-                    icon: "skeico_word_sketch",
                     id: "wordsketch",
                     active: p.wordsketch && features.wordsketch
                 }, {
                     page: "sketchdiff",
-                    icon: "skeico_word_sketch_difference",
                     id: "sketchdiff",
                     active: p.sketchdiff && features.sketchdiff
                 }, {
                     page: "thesaurus",
-                    icon: "skeico_thesaurus",
                     id: "thesaurus",
                     active: p.thesaurus && features.thesaurus
                 }, {
                     page: "concordance",
-                    icon: "skeico_concordance",
                     id: "concordance",
                     active: p.concordance && features.concordance
                 }, {
                     page: "parconcordance",
-                    icon: "skeico_parallel_concordance",
                     id: "parconcordance",
+                    tooltip: "t_id:d_parconc_inactive",
                     active: p.parconcordance && features.parconcordance
                 }, {
                     page: "wordlist",
-                    desc: "db.wordlistDesc",
-                    icon: "skeico_word_list",
                     id: "wordlist",
                     active: p.wordlist && features.wordlist
                 }, {
                     page: "ngrams",
-                    icon: "skeico_n_grams",
                     id: "ngrams",
                     active: p.ngrams && features.ngrams
                 }, {
                     page: "keywords",
-                    icon: "skeico_keywords",
                     id: "keywords",
                     active: p.keywords && features.keywords
                 }, {
                     page: "trends",
-                    icon: "skeico_trends",
                     id: "trends",
                     active: p.trends && features.trends
                 }, {
+                    page: "text-type-analysis",
+                    query: this.corpus ? `?corpname=${this.corpus.corpname}&wlminfreq=1&include_nonwords=1&showresults=1&wlicase=1&wlnums=frq&wlattr=${wlattr}` : "",
+                    iconClass: "material-icons rotate180",
+                    icon: "donut_small",
+                    id: "tta",
+                    name: _("tta"),
+                    desc: _("ttaDesc"),
+                    active: p.wordlist && features.wordlist && wlattr
+                }, {
                     page: "ocd",
-                    icon: "skeico_ocd",
                     id: "ocd",
                     active: p.ocd && features.ocd
+                }, {
+                    oct: true,
+                    id: "octerms",
+                    active: this.corpus && (this.corpus.owner_id !== null || this.corpus.corpname.includes("_oct")) && this.corpus.aligned && this.corpus.aligned.length > 0,
+                    tooltip: "t_id:d_octerms_inactive"
                 }
             ]
         }
         this._updateItems()
 
         _updateUrl(){
-            let urlQuery = {}
+            let urlQuery = Url.getQuery()
             if(this.corpus && this.corpus.corpname){
-                urlQuery = {
-                    corpname: this.corpus.corpname
-                }
+                urlQuery.corpname = this.corpus.corpname
             }
-            history.replaceState(null, null, Router.createUrl("dashboard", urlQuery))
+            history.replaceState(null, null, Url.create("dashboard", urlQuery))
         }
 
         this.tabs = [{
@@ -237,17 +246,10 @@
             labelId: "db.recentResults",
             tag: "features-tab-history"
         }, {
-            tabId: "favourites",
-            labelId: "db.favouritesResults",
-            tag: "features-tab-favourites"
+            tabId: "annotations",
+            labelId: "an.annotations",
+            tag: "features-tab-annotations"
         }]
-        if (Auth.getAnnotationGroup()) {
-            this.tabs.push({
-                tabId: "annotations",
-                labelId: "cc.annotations",
-                tag: "features-tab-annotations"
-            })
-        }
 
         getClasses(item){
             return{
@@ -262,10 +264,22 @@
         }
 
         onCardClick(evt){
-            if(!evt.item.item.active){
+            let item = evt.item.item
+            if(!item.active){
                 evt.preventDefault()
+                return
             }
-            Dispatcher.trigger("RESET_STORE", evt.item.item.page)
+            if(!item.oct) {
+                Dispatcher.trigger("RESET_STORE", item.page)
+            }
+            else{
+                Dispatcher.trigger("openDialog", {
+                    title: _("bitermsDialogTitle"),
+                    tag: "oct-langs",
+                    class: "no-print"
+                })
+            }
+
         }
 
         onBannerToggleClick(evt){
@@ -279,9 +293,12 @@
         this.on("updated", this._updateUrl)
 
         this.on("mount", () => {
+            let query = Url.getQuery()
+            if(query.corp_info && this.corpus && this.corpus.corpname){
+                SkE.showCorpusInfo(this.corpus.corpname)
+            }
             this._updateUrl()
             AppStore.on("corpusChanged", this.update)
-            Auth.getAnnotationGroup() && this.corpus && window.stores.concordance && window.stores.concordance.getAnnotations()
         })
 
         this.on("unmount", () => {

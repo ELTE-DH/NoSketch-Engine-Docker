@@ -218,6 +218,10 @@ Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in `
 The link is displayed in the lower-right corner of the main dashboard if [any type of authentication](#authentication)
  is set.
 
+## Similar projects
+
+- https://hub.docker.com/r/acdhch/noske
+
 ## License
 
 The following files in this repository are from https://nlp.fi.muni.cz/trac/noske and have their own license:

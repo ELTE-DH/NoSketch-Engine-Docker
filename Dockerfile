@@ -33,7 +33,6 @@ RUN cd manatee* && \
     make install
 
 ## Bonito
-### HACK1: patch conccgi.py to handle large corpora
 RUN cd bonito* && \
     ./configure && \
     make && \
@@ -48,9 +47,9 @@ RUN cd gdex* && \
     ./setup.py install
 
 ## Crystal
-### HACK2: Modify npm install command in Makefile to handle "permission denied"
-### HACK3: Modify shell in Makefile to bash to handle bashism
-### HACK4: modify URL_BONITO to be set dynamically to the request domain in every request
+### HACK1: Modify npm install command in Makefile to handle "permission denied"
+### HACK2: Copy modified page-dashboard.tag to be able to display custom citation message with URL
+### HACK3: modify URL_BONITO to be set dynamically to the request domain in every request
 COPY conf/page-dashboard.tag /tmp/noske_files/
 RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile && \
     cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
@@ -78,6 +77,7 @@ COPY conf/*.crt /etc/shibboleth/
 # COPY secrets/htaccess /var/www/.htaccess
 # COPY secrets/htpasswd /var/lib/bonito/htpasswd
 # COPY secrets/*.crt /etc/shibboleth/
+
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

@@ -4,7 +4,7 @@ This is a [dockerised](https://www.docker.com/) version of [NoSketch Engine](htt
  the open source version of [Sketch Engine](https://www.sketchengine.eu/) corpus manager and text analysis software
  developed by [Lexical Computing Limited](https://www.lexicalcomputing.com/).
 
-This docker image is based on Debian 10 Buster and
+This docker image is based on Debian 11 Bullseye and
  [the NoSketch Engine build and installation process](https://nlp.fi.muni.cz/trac/noske#Buildandinstallation) contains
  some additional hacks for convenient install and use.
 See [Dockerfile](Dockerfile) for details.
@@ -217,6 +217,10 @@ Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in `
 
 The link is displayed in the lower-right corner of the main dashboard if [any type of authentication](#authentication)
  is set.
+
+## Similar projects
+
+- https://hub.docker.com/r/acdhch/noske
 
 ## License
 

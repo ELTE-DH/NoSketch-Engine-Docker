@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- Python -*-
 # Copyright (c) 2003-2020  Pavel Rychly, Vojtech Kovar, Milos Jakubicek,
 #                          Vit Baisa
@@ -6,8 +6,11 @@
 import cgitb; cgitb.enable()
 
 import sys, os
-if '/usr/local/lib/python2.7/dist-packages/bonito' not in sys.path:
-    sys.path.insert (0, '/usr/local/lib/python2.7/dist-packages/bonito')
+if '/usr/local/lib/python3.9/site-packages' not in sys.path:
+    sys.path.insert (0, '/usr/local/lib/python3.9/site-packages')
+
+if '/usr/local/lib/python3.9/site-packages/bonito' not in sys.path:
+    sys.path.insert (0, '/usr/local/lib/python3.9/site-packages/bonito')
 
 try:
     from wseval import WSEval
@@ -47,15 +50,15 @@ class BonitoCGI (WSEval, UserCGI):
 
     # TODO: Read corpora list runtime from registry
     # set available corpora, e.g.: corplist = ['susanne', 'bnc', 'biwec']
-    if not os.environ.has_key ('MANATEE_REGISTRY'):
+    if 'MANATEE_REGISTRY' not in os.environ:
         # TODO: SET THIS APROPRIATELY!
         os.environ['MANATEE_REGISTRY'] = '/corpora/registry'
-    corplist = [corp_name.decode('UTF-8') for corp_name in os.listdir(os.environ['MANATEE_REGISTRY'])]
+    corplist = [corp_name for corp_name in os.listdir(os.environ['MANATEE_REGISTRY'])]
     # set default corpus
     if len(corplist) > 0:
         corpname = corplist[0]
     else:
-        corpname = u'susanne'
+        corpname = 'susanne'
     err_types_select = False
 
     def __init__ (self, user=None):
@@ -74,7 +77,7 @@ class BonitoCGI (WSEval, UserCGI):
 if __name__ == '__main__':
     # use run.cgi <url> <username> for debugging
     if len(sys.argv) > 1:
-        from urlparse import urlsplit
+        from urllib.parse import urlsplit
         us = urlsplit(sys.argv[1])
         os.environ['REQUEST_METHOD'] = 'GET'
         os.environ['REQUEST_URI'] = sys.argv[1]
@@ -84,19 +87,19 @@ if __name__ == '__main__':
         username = sys.argv[2]
     else:
         username = None
-    if not os.environ.has_key ('MANATEE_REGISTRY'):
+    if 'MANATEE_REGISTRY' not in os.environ:
         # TODO: SET THIS APROPRIATELY!
         os.environ['MANATEE_REGISTRY'] = '/corpora/registry'
-    if ";prof=" in os.environ['REQUEST_URI'] or "&prof=" in os.environ['REQUEST_URI']:
+    if ";prof=" in os.environ['QUERY_STRING'] or "&prof=" in os.environ['QUERY_STRING']:
         import cProfile, pstats, tempfile
         proffile = tempfile.NamedTemporaryFile()
         cProfile.run('''BonitoCGI().run_unprotected (selectorname="corpname",
                         outf=open(os.devnull, "w"))''', proffile.name)
         profstats = pstats.Stats(proffile.name)
-        print "<pre>"
+        print("<pre>")
         profstats.sort_stats('time','calls').print_stats(50)
         profstats.sort_stats('cumulative').print_stats(50)
-        print "</pre>"
+        print("</pre>")
     else:
         BonitoCGI(user=username).run_unprotected (selectorname='corpname')
 

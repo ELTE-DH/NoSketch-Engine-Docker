@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.9/site-packages
+
 # If no params then start the server,
 # else run the specified command from /usr/local/bin
 if [ $# -eq 1 ]; then

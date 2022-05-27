@@ -117,22 +117,24 @@
             </div>
 
             <div if={!hideBanner}
-                    class="banner center-align">
-                <img src="images/boot_camp.png" width="200" loading="lazy">
-                <div class="mb-3"> An online course in using Sketch Engine. Registration open!</div>
-                <a href="https://www.sketchengine.eu/bootcamp/boot-camp-online/"
-                        class="btn"
-                        target="_blank">Registration</a>
-            </div>
-            <!--div class="banner bigBanner center-align">
-                <a class="btn btn-floating btn-flat right" onClick={onBannerToggleClick}>
-                    <i class="material-icons bigBanner">keyboard_arrow_up</i>
-                </a>
                 <h5>If you use the corpora for your work, please cite the corresponding publication.</h5>
                 <br>
                 <a href="CITATION_LINK_PLACEHOLDER"
                         class="btn"
                         target="_blank">The list of publications recommended to cite</a>
+                <br>
+            </div>
+            <!--div class="banner bigBanner center-align">
+                <a class="btn btn-floating btn-flat right" onClick={onBannerToggleClick}>
+                    <i class="material-icons bigBanner">keyboard_arrow_up</i>
+                </a>
+                <img src="images/boot_camp.png" loading="lazy">
+                <h5>2 days of corpus searching &amp; corpus building</h5>
+                <div>Learn to work with Sketch Engine like a pro!</div>
+                <br>
+                <a href={externalLink("bootCamp")}
+                        class="btn"
+                        target="_blank">{_("detailsAndReg")}</a>
                 <br>
             </div>
             <div class="banner smallBanner center-align" onClick={onBannerToggleClick}>

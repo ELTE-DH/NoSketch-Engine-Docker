@@ -117,6 +117,7 @@
             </div>
 
             <div if={!hideBanner}
+                    class="banner center-align">
                 <h5>If you use the corpora for your work, please cite the corresponding publication.</h5>
                 <br>
                 <a href="CITATION_LINK_PLACEHOLDER"

@@ -15,7 +15,8 @@ RUN apt-get update && \
         python3-dev \
         python3-setuptools \
         file \
-        swig
+        swig && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Enable apache CGI and mod_rewrite
@@ -78,6 +79,8 @@ COPY conf/*.crt /etc/shibboleth/
 # COPY secrets/htpasswd /var/lib/bonito/htpasswd
 # COPY secrets/*.crt /etc/shibboleth/
 
+### HACK4: Set PYTHONPATH ENV variable to help tools to find manatee
+ENV PYTHONPATH=/usr/local/lib/python3.9/site-packages
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

@@ -79,8 +79,13 @@ COPY conf/*.crt /etc/shibboleth/
 # COPY secrets/htpasswd /var/lib/bonito/htpasswd
 # COPY secrets/*.crt /etc/shibboleth/
 
-### HACK4: Set PYTHONPATH ENV variable to help tools to find manatee
-ENV PYTHONPATH=/usr/local/lib/python3.9/site-packages
+### HACK4: Link site-packages to dist-packages to help Python find these packages
+#          (e.g. creating subcorpus and keywords on it -> calls mkstats with popen which calls manatee internally)
+RUN ln -s /usr/local/lib/python3.9/site-packages/ /usr/lib/python3/dist-packages/bonito && \
+    ln -s /usr/local/lib/python3.9/site-packages/manatee.py /usr/lib/python3/dist-packages/manatee.py && \
+    ln -s /usr/local/lib/python3.9/site-packages/_manatee.so /usr/lib/python3/dist-packages/_manatee.so && \
+    ln -s /usr/local/lib/python3.9/site-packages/_manatee.a /usr/lib/python3/dist-packages/_manatee.a && \
+    ln -s /usr/local/lib/python3.9/site-packages/_manatee.la /usr/lib/python3/dist-packages/_manatee.la
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

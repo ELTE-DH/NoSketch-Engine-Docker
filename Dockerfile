@@ -56,7 +56,7 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
     cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
     cd crystal-* && \
     make && \
-    make install VERSION=2.107 && \
+    make install VERSION=2.114 && \
     sed -i 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
         /var/www/crystal/config.js
 

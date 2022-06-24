@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="row" if={ready}>
-                        <div class="col xl6 l12 m6 s12 {show-on-xlarge-only: !item.active}" each={item in items} >
+                        <div class="col xl6 l12 m6 s12 {show-on-xlarge-only: !item.active}" each={item in activeItems} >
                             <a href={item.active && !item.oct ? ("#" + item.page + (item.query || "")) : ""}
                                     id="dashboard_btn{item.id}"
                                     class="text-primary"
@@ -165,7 +165,7 @@
         this.mixin("tooltip-mixin")
 
         this.isFullAccount = Auth.isFullAccount()
-        this.bannerExpanded = false
+        this.bannerExpanded = true
         this.hideBanner = window.config.HIDE_DASHBOARD_BANNER
 
 
@@ -221,7 +221,7 @@
                     id: "tta",
                     name: _("tta"),
                     desc: _("ttaDesc"),
-                    active: p.wordlist && features.wordlist && wlattr
+                    active: p.tta && features.wordlist && wlattr
                 }, {
                     page: "ocd",
                     id: "ocd",
@@ -233,6 +233,15 @@
                     tooltip: "t_id:d_octerms_inactive"
                 }
             ]
+            this.activeItems = []
+            this.inactiveItems = []
+            this.items.forEach(item => {
+                if(!isDef(p[item.id]) || p[item.id]){
+                    this.activeItems.push(item)
+                } else {
+                    this.inactiveItems.push(item)
+                }
+            })
         }
         this._updateItems()
 
@@ -289,6 +298,12 @@
             evt.preventUpdate = true
             this.bannerExpanded = !this.bannerExpanded
             $(this.root).toggleClass("bannerExpanded", this.bannerExpanded)
+        }
+
+        getInactiveItemTooltip(item){
+            let name = item.name || getFeatureLabel(item.id)
+            let desc = item.desc || _("db." + item.id + "Desc")
+            return `<b>${name}</b><br>${desc}`
         }
 
         this.on("update", this._updateItems)

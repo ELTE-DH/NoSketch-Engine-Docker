@@ -55,19 +55,6 @@
                             </a>
                         </div>
                     </div>
-                    <div if={inactiveItems.length}
-                            class="row inactiveFeaturesBar pt-8 dividerTop center-align">
-                        <span each={item in inactiveItems}
-                                class="mr-4">
-                            <i class="{item.iconClass || 'ske-icons'} {getFeatureIcon(item.id)} tooltipped"
-                                data-tooltip={getInactiveItemTooltip(item)}>
-                                {item.icon}
-                            </i>
-                        </span>
-                        <div class="grey-text pt-3">
-                            <raw-html content={_("NAInNoSkeP", ['<a target="_blank" href="https://sketchengine.eu">Sketch Engine</a>'])}></raw-html>
-                        </div>
-                    </div>
                 </div>
                 <div if={!corpus || !ready} class="card-content">
                     <div class="notReady">

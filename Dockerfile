@@ -13,10 +13,13 @@ RUN apt-get update && \
         libpcre++-dev \
         libsass-dev \
         python3-dev \
+        python3-pip \
         python3-setuptools \
+        libcap-dev \
         file \
         swig && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    pip3 install python-prctl openpyxl
 
 
 # Enable apache CGI and mod_rewrite

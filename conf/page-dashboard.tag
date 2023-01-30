@@ -88,7 +88,7 @@
                                 <a href="#ca-add-content" class="btn white-text">{_("addTexts")}</a>
                             </virtual>
                             <virtual if={corpus.isCompilationFailed && window.permissions["ca-compile"]}>
-                                 <h4>{_("ca.compilation_failed")}</h4>
+                                 <h4>{_("compilation_failed")}</h4>
                                 <div class="note">{_("ca.compilation_failedDesc")}</div>
                                 <br>
                                 <a href="#ca-compile" class="btn white-text btn-primary">{_("compile")}</a>
@@ -167,7 +167,19 @@
         this.isFullAccount = Auth.isFullAccount()
         this.bannerExpanded = true
         this.hideBanner = window.config.HIDE_DASHBOARD_BANNER
+        this.bannerId = Math.ceil(Math.random() * 3)
 
+        _isBitermsActive(){
+            if(!this.corpus
+                    || (this.corpus.owner_id === null && !this.corpus.corpname.includes("_oct"))
+                    || (!this.corpus.aligned || this.corpus.aligned.length == 0)
+                    || !AppStore.langsWithBiterms.includes(this.corpus.language_name)){
+                return false
+            }
+            let compatibleCorpora = AppStore.data.corpusList.filter(c => AppStore.langsWithBiterms.includes(c.language_name))
+                    .map(c => c.corpname.split("/").splice(-1).join("/"))
+            return this.corpus.aligned.some(c => compatibleCorpora.includes(c))
+        }
 
         _updateItems() {
             this.corpus = AppStore.get("corpus")
@@ -229,7 +241,7 @@
                 }, {
                     oct: true,
                     id: "octerms",
-                    active: this.corpus && (this.corpus.owner_id !== null || this.corpus.corpname.includes("_oct")) && this.corpus.aligned && this.corpus.aligned.length > 0,
+                    active: this._isBitermsActive(),
                     tooltip: "t_id:d_octerms_inactive"
                 }
             ]
@@ -311,10 +323,6 @@
         this.on("updated", this._updateUrl)
 
         this.on("mount", () => {
-            let query = Url.getQuery()
-            if(query.corp_info && this.corpus && this.corpus.corpname){
-                SkE.showCorpusInfo(this.corpus.corpname)
-            }
             this._updateUrl()
             AppStore.on("corpusChanged", this.update)
         })

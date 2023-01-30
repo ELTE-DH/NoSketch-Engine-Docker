@@ -32,7 +32,7 @@
             entityID property and adjust discoveryURL to point to discovery service.
             You can also override entityID on /Login query string, or in RequestMap/htaccess.
             -->
-            <SSO discoveryProtocol="SAMLDS" discoveryURL="https://discovery.eduid.hu">
+            <SSO discoveryProtocol="SAMLDS" discoveryURL="https://mdx.eduid.hu/role/idp.ds">
               SAML2
             </SSO>
 
@@ -68,13 +68,7 @@
         <!--
         <MetadataProvider type="XML" validate="true" path="partner-metadata.xml"/>
         -->
-        <MetadataProvider type="Chaining">
-            <MetadataProvider type="XML" id="href-2020" url="https://metadata.eduid.hu/2020/href.xml" backingFilePath="href-2020.xml">
-                <MetadataFilter type="Signature" certificate="href-metadata-signer-2020.crt"/>
-                <MetadataFilter type="RequireValidUntil" maxValidityInterval="864000"/>
-            </MetadataProvider>
-        </MetadataProvider>
-        <MetadataProvider type="MDQ" id="href-2020" ignoreTransport="true" baseUrl="https://mdx-2020.eduid.hu/">
+        <MetadataProvider type="MDQ" id="href-2020" ignoreTransport="true" baseUrl="https://mdx.eduid.hu/">
             <MetadataFilter type="Signature" certificate="href-metadata-signer-2020.crt"/>
             <MetadataFilter type="RequireValidUntil" maxValidityInterval="864000"/>
         </MetadataProvider>

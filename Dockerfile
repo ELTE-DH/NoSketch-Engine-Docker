@@ -1,4 +1,4 @@
-# From official Debian 10 Buster image pinned by its name buster-slim
+# From official Debian 11 Bullseye image pinned by its name bullseye-slim
 FROM debian:bullseye-slim
 
 
@@ -59,7 +59,7 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
     cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
     cd crystal-* && \
     make && \
-    make install VERSION=2.114 && \
+    make install VERSION=2.130.1 && \
     sed -i 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
         /var/www/crystal/config.js
 

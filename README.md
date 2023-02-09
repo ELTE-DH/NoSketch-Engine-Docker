@@ -74,12 +74,13 @@ Customise the environment variables in `secrets/env.sh` (see [`secrets/env.sh.te
 
 #### 3b. CLI Usage
 
-- To run NoSketch Engine CLI commands run the docker image and add the desired command and its parameters
- (e.g. `corpinfo -s susanne`) at the end of the command:
-    - `make execute CMD="corpinfo -s susanne"`
-    - or:
-       `docker run --rm -it --mount type=bind,src=$$(pwd)/corpora,dst=/corpora ${IMAGE_NAME}:latest corpinfo -s susanne`
-- To get a shell to a running container use `make connect`
+- `make execute`: runs NoSketch Engine CLI commands using the docker image. Specify the command to run in the `CMD` parameter.
+  For example:
+  - `make execute CMD='corpinfo -s susanne'`\
+    gives info about the _susanne_ corpus
+  - `make execute CMD='corpquery mnsz2_v2.0.5 "[lemma=\"visz\"][word=\"a\"][word=\"prímet\"]"'`\
+    runs the specified query on _mnsz2_v2.0.5_ corpus. Mind the use of quotation marks: `\"` inside `"` inside `'`.
+- `make connect`: gives a shell to a running container
 
 ### 4. Additional commands
 

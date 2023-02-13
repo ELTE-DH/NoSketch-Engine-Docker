@@ -78,8 +78,9 @@ Customise the environment variables in `secrets/env.sh` (see [`secrets/env.sh.te
   For example:
   - `make execute CMD='corpinfo -s susanne'`\
     gives info about the _susanne_ corpus
-  - `make execute CMD='corpquery mnsz2_v2.0.5 "[lemma=\"visz\"][word=\"a\"][word=\"prímet\"]"'`\
-    runs the specified query on _mnsz2_v2.0.5_ corpus. Mind the use of quotation marks: `\"` inside `"` inside `'`.
+  - `make execute CMD='corpquery emagyardemo "[lemma=\"és\"]"'`\
+    runs the specified query on the _emagyardemo_ corpus and gives 2 hits.\
+    Mind the use of quotation marks: `\"` inside `"` inside `'`.
 - `make connect`: gives a shell to a running container
 
 ### 4. Additional commands

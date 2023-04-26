@@ -6,6 +6,7 @@ FROM debian:bullseye-slim
 ## deb packages
 RUN apt-get update && \
     apt-get install -y \
+        bison \
         apache2 \
         libapache2-mod-shib \
         build-essential \
@@ -59,7 +60,7 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
     cp page-dashboard.tag crystal*/app/src/dashboard/page-dashboard.tag && \
     cd crystal-* && \
     make && \
-    make install VERSION=2.130.1 && \
+    make install VERSION=2.142 && \
     sed -i 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
         /var/www/crystal/config.js
 

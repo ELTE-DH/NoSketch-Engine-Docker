@@ -6,12 +6,12 @@ FROM debian:bullseye-slim
 ## deb packages
 RUN apt-get update && \
     apt-get install -y \
-        bison \
         apache2 \
         libapache2-mod-shib \
         build-essential \
         libltdl-dev \
         libpcre++-dev \
+        bison \
         libsass-dev \
         python3-dev \
         python3-pip \
@@ -61,8 +61,9 @@ RUN sed  -i 's/npm install/npm install --unsafe-perm=true/' crystal*/Makefile &&
     cd crystal-* && \
     make && \
     make install VERSION=2.142 && \
-    sed -i 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
-        /var/www/crystal/config.js
+    sed -e 's|URL_BONITO: "http://.*|URL_BONITO: window.location.origin + "/bonito/run.cgi/",|' \
+        -e 's|HIDE_DASHBOARD_BANNER: true|HIDE_DASHBOARD_BANNER: false|' \
+        -i /var/www/crystal/config.js
 
 
 # Remove unnecessary files and create symlink for utility command

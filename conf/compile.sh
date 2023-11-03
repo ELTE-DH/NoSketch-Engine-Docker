@@ -6,7 +6,7 @@ if [[ -n "$(ls /corpora/*/indexed 2> /dev/null)" ]]; then
         echo 'INFO: Continuing in force recompile mode' >&2
     else
         echo 'Do you want to continue? [y/N]' >&2
-        read -N1 ans
+        read -rN1 ans
         echo
         if [[ ! "${ans:-N}" =~ ^[yY] ]]; then
             echo "To recompile a specific corpus, run" \
@@ -19,5 +19,5 @@ fi
 # Compile corpora
 for CORP_FILE in /corpora/registry/*; do
     echo "Running: compilecorp --no-ske --recompile-corpus ${CORP_FILE}" >&2;
-    compilecorp --no-ske --recompile-corpus ${CORP_FILE} || exit $?;
+    compilecorp --no-ske --recompile-corpus "${CORP_FILE}" || exit $?;
 done

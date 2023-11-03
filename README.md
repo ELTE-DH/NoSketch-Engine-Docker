@@ -4,7 +4,7 @@ This is a [dockerised](https://www.docker.com/) version of [NoSketch Engine](htt
  the open source version of [Sketch Engine](https://www.sketchengine.eu/) corpus manager and text analysis software
  developed by [Lexical Computing Limited](https://www.lexicalcomputing.com/).
 
-This docker image is based on Debian 11 Bullseye and
+This docker image is based on Debian 12 Bookworm and
  [the NoSketch Engine build and installation process](https://nlp.fi.muni.cz/trac/noske#Buildandinstallation) contains
  some additional hacks for convenient install and use.
 See [Dockerfile](Dockerfile) for details.
@@ -209,7 +209,7 @@ To be able to use the container as a Shibboleth SP (with eduid.hu)
        `export HTACCESS=""`
     - `HTPASSWD` e.g. `export HTPASSWD="$(cat secrets/htpasswd 2> /dev/null)"` or set as empty if Shibboleth is used
        `export HTPASSWD=""`
-3. Run `docker-compose up -d`
+2. Run `docker-compose up -d`
 
 ## Citation link
 

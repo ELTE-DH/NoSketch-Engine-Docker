@@ -6,11 +6,11 @@
 import cgitb; cgitb.enable()
 
 import sys, os
-if '/usr/local/lib/python3.9/site-packages' not in sys.path:
-    sys.path.insert (0, '/usr/local/lib/python3.9/site-packages')
+if '/usr/lib/python3/dist-packages' not in sys.path:
+    sys.path.insert (0, '/usr/lib/python3/dist-packages')
 
-if '/usr/local/lib/python3.9/site-packages/bonito' not in sys.path:
-    sys.path.insert (0, '/usr/local/lib/python3.9/site-packages/bonito')
+if '/usr/lib/python3/dist-packages/bonito' not in sys.path:
+    sys.path.insert (0, '/usr/lib/python3/dist-packages/bonito')
 
 try:
     from wseval import WSEval

@@ -7,23 +7,28 @@ services:
     image: "traefik:v2.9.1"
     container_name: "traefik"
     command:
-      #- "--log.level=DEBUG"
+      # - "--log.level=DEBUG"
       # - "--api.insecure=true"
+      # - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       # - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL:? Please set LETS_ENCRYPT_EMAIL environment variable!}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--ping"
     ports:
-      - "${PORT:-10070}:80"
+      - "80:80"
       - "443:443"
       # - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
 
   sketch_engine:
     restart: always
@@ -43,6 +48,12 @@ services:
         target: /corpora
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sketchengine.rule=Host(`${SERVER_ALIAS:? Please set SERVER_ALIAS environment variable!}`)"
-      - "traefik.http.routers.sketchengine.entrypoints=web,websecure"
-      - "traefik.http.routers.sketchengine.tls.certresolver=myresolver"
+      - "traefik.http.routers.myrouter.rule=Host(`${SERVER_ALIAS:? Please set SERVER_ALIAS environment variable!}`)"
+      - "traefik.http.routers.myrouter.entrypoints=websecure"
+      - "traefik.http.routers.myrouter.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.myredirectscheme.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.myredirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.routers.myrouterhttp.rule=Host(`${SERVER_ALIAS:? Please set SERVER_ALIAS environment variable!}`)"
+      - "traefik.http.routers.myrouterhttp.entrypoints=web"
+      - "traefik.http.routers.myrouterhttp.middlewares=myredirectscheme"
+      - "traefik.http.routers.myrouterhttp.priority=1" # allow the "/.well-known/acme-challenge/" router to take precedence

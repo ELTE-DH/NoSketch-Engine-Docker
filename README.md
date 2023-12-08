@@ -43,7 +43,7 @@ Corpus configuration recipes to aid compilation of large corpora can be found [h
 
 - Either pull the prebuilt image from [Dockerhub](https://hub.docker.com/r/eltedh/nosketch-engine): `make pull`
    (or `docker pull eltedh/nosketch-engine:latest`)
-- Or build your own image yourself (the process can take 5 minutes or so): `make build IMAGE_NAME=myimage`– be sure
+- Or build your own image yourself (the process can take 5 minutes or so): `make build IMAGE_NAME=myimage:latest`– be sure
    to name your image using the `IMAGE_NAME` parameter
 
 ### 2. Compile your corpus
@@ -95,7 +95,7 @@ Customise the environment variables in `secrets/env.sh` (see [`secrets/env.sh.te
 ## `make` parameters, multiple images and multiple containers
 
 By default,
-- the name of the docker image (`IMAGE_NAME`) is `eltedh/nosketch-engine`,
+- the name of the docker image (`IMAGE_NAME`) is `eltedh/nosketch-engine:latest`,
 - the name of the docker container (`CONTAINTER_NAME`) is `noske`,
 - the directory where the corpora are stored (`CORPORA_DIR`) is `$(pwd)/corpora`,
 - the port number which the docker container uses (`PORT`) is `10070`,
@@ -115,11 +115,11 @@ By default,
    see [secrets/{htaccess.template,htpasswd.template}](secrets) for example) or empty if these files do not exist
    (mandatory for [`docker-compose.yml`](docker-compose.yml)).
 
-If there is a need to change these, set them as environment variables (e.g. `export IMAGE_NAME=myimage`)
+If there is a need to change these, set them as environment variables (e.g. `export IMAGE_NAME=myimage:latest`)
  or supplement `make` commands with the appropriate values (e.g. `make run PORT=8080`).
 
-E.g. `export IMAGE_NAME=myimage; make build` build an image called `myimage`; and
-`make run IMAGE_NAME=myimage CONTAINER_NAME=mycontainer PORT=12345` launches the image called `myimage` in a container
+E.g. `export IMAGE_NAME=myimage:latest; make build` build an image called `myimage:latest`; and
+`make run IMAGE_NAME=myimage:latest CONTAINER_NAME=mycontainer PORT=12345` launches the image called `myimage:latest` in a container
  called `mycontainer` which will use port `12345`.
 In the latter case the system will be available at `http://SERVER_NAME:12345/`.
 
@@ -153,7 +153,7 @@ be sure to name them differently (by using `CONTAINER_NAME`) and also be sure to
  (`CORPORA_DIR`) accordingly for each container.
 
 If you want to build your own docker image be sure to include the `IMAGE_NAME` parameter into the build command:
- `make build IMAGE_NAME=myimage` and also provide `IMAGE_NAME=myimage` for every `make` command
+ `make build IMAGE_NAME=myimage:latest` and also provide `IMAGE_NAME=myimage:latest` for every `make` command
  which accepts this parameter.
 
 A convenient solution for managing many environment variables in an easy and reproducible way

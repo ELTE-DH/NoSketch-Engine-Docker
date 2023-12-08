@@ -1,6 +1,6 @@
 PORT?=10070
 CMD?=corpquery susanne '[word="Mardi"][word="Gras"]'
-IMAGE_NAME?=eltedh/nosketch-engine
+IMAGE_NAME?=eltedh/nosketch-engine:latest
 CONTAINER_NAME?=noske
 CORPORA_DIR?=$$(pwd)/corpora
 SERVER_NAME?=https://sketchengine.company.com/
@@ -14,7 +14,7 @@ all: build compile run
 
 # Pull prebuilt $(IMAGE_NAME) docker image from Dockerhub
 pull:
-	docker pull $(IMAGE_NAME):latest
+	docker pull $(IMAGE_NAME)
 .PHONY: pull
 
 
@@ -49,7 +49,7 @@ run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$(CORPORA_DIR),dst=/corpora \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
-     $(IMAGE_NAME):latest
+     $(IMAGE_NAME)
 	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
 
@@ -74,7 +74,7 @@ connect:
 execute:
 	docker run --rm -it --mount type=bind,src=$(CORPORA_DIR),dst=/corpora -e FORCE_RECOMPILE="$(FORCE_RECOMPILE)" \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
-     $(IMAGE_NAME):latest "$(CMD)"
+     $(IMAGE_NAME) "$(CMD)"
 .PHONY: execute
 
 

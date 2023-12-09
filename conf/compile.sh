@@ -18,6 +18,6 @@ fi
 
 # Compile corpora
 for CORP_FILE in /corpora/registry/*; do
-    echo "Running: compilecorp --no-ske --recompile-corpus ${CORP_FILE}" >&2;
+    echo "Running: compilecorp --no-ske --recompile-corpus \"${CORP_FILE}\"" >&2;
     compilecorp --no-ske --recompile-corpus "${CORP_FILE}" || exit $?;
 done

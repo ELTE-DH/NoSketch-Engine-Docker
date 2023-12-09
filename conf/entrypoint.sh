@@ -39,5 +39,5 @@ if [ $# -eq 1 ]; then
     /usr/sbin/apache2ctl -D FOREGROUND
 else
     shift
-    /usr/local/bin/$@
+    "$@"
 fi

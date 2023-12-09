@@ -44,11 +44,12 @@ remove-cert:
 
 
 # Run $(CONTAINER_NAME) container from $(IMAGE_NAME) image, mount $(CORPORA_DIR), use host port $(PORT)
-#  and set various environment variables
+#  and set various environment variables (Variables prefixed with $$ are shell variables to preserve newlines)
 run:
 	@make -s stop
 	docker run -d --rm --name $(CONTAINER_NAME) -p$(PORT):80 --mount type=bind,src=$(CORPORA_DIR),dst=/corpora \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
+     -e HTACCESS="$$HTACCESS" -e HTPASSWD="$$HTPASSWD" -e PRIVATE_KEY="$$PRIVATE_KEY" -e PUBLIC_KEY="$$PUBLIC_KEY" \
      $(IMAGE_NAME)
 	@echo 'URL: http://localhost:$(PORT)/'
 .PHONY: run
@@ -71,9 +72,11 @@ connect:
 
 
 # Execute commmand in CMD variable and set various environment variables
+# (Variables prefixed with $$ are shell variables to preserve newlines)
 execute:
 	docker run --rm -it --mount type=bind,src=$(CORPORA_DIR),dst=/corpora -e FORCE_RECOMPILE="$(FORCE_RECOMPILE)" \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
+     -e HTACCESS="$$HTACCESS" -e HTPASSWD="$$HTPASSWD" -e PRIVATE_KEY="$$PRIVATE_KEY" -e PUBLIC_KEY="$$PUBLIC_KEY" \
      $(IMAGE_NAME) "$(CMD)"
 .PHONY: execute
 

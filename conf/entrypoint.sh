@@ -7,10 +7,10 @@ if [ $# -eq 1 ]; then
     SERVER_NAME=${SERVER_NAME:="https://sketchengine.company.com/"}
     SERVER_ALIAS=${SERVER_ALIAS:="sketchengine.company.com"}
     CITATION_LINK=${CITATION_LINK:="https://github.com/elte-dh/NoSketch-Engine-Docker"}
-    PRIVATE_KEY?=${PRIVATE_KEY:=""}
-    PUBLIC_KEY?=${PUBLIC_KEY:=""}
-    HTACCESS?=${HTACCESS:=""}
-    HTPASSWD?=${HTPASSWD:=""}
+    PRIVATE_KEY=${PRIVATE_KEY:=""}
+    PUBLIC_KEY=${PUBLIC_KEY:=""}
+    HTACCESS=${HTACCESS:=""}
+    HTPASSWD=${HTPASSWD:=""}
     echo "Starting server with name (${SERVER_NAME}) and alias (${SERVER_ALIAS})."
     echo 'You can override these values with SERVER_NAME and SERVER_ALIAS environment variables.'
     sed -i "s#SERVER_NAME_PLACEHOLDER#${SERVER_NAME}#" /etc/apache2/sites-enabled/000-default.conf

@@ -55,7 +55,7 @@ RUN tar -xvf bonito* && \
 RUN tar -xvf gdex* && \
     cd gdex* && \
     debmake -b":python3" && \
-    sed -i "s/<version>/4.12/g" setup.py && \
+    sed -i "s/<version>/4.13.2/g" setup.py && \
     EDITOR=/bin/true dpkg-source -q --commit . fix_build && \
     echo -e 'override_dh_auto_test:\n\techo "Disabled autotest"' >> debian/rules && \
     debuild -d -us -uc
@@ -71,7 +71,7 @@ RUN tar -xvf crystal* && \
     debmake && \
     touch debian/changelog && \
     sed -e 's/npm install/npm install --unsafe-perm=true/' \
-        -e 's/VERSION ?= `git describe --tags --always`/VERSION=2.142/' \
+        -e 's/VERSION ?= `git describe --tags --always`/VERSION=2.165.2/' \
         -i Makefile && \
     cp ../page-dashboard.tag app/src/dashboard/page-dashboard.tag && \
     EDITOR=/bin/true dpkg-source -q --commit . fix_build && \

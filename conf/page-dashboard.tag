@@ -167,7 +167,7 @@
         this.isFullAccount = Auth.isFullAccount()
         this.bannerExpanded = true
         this.hideBanner = window.config.HIDE_DASHBOARD_BANNER
-        this.bannerId = Math.ceil(Math.random() * 3)
+        this.bannerId = 1//Math.ceil(Math.random() * 2)
 
         _isBitermsActive(){
             if(!this.corpus

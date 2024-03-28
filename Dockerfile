@@ -71,7 +71,7 @@ RUN tar -xvf crystal* && \
     debmake && \
     touch debian/changelog && \
     sed -e 's/npm install/npm install --unsafe-perm=true/' \
-        -e 's/VERSION ?= `git describe --tags --always`/VERSION=2.165.2/' \
+        -e 's/VERSION ?= `git describe --tags --always`/VERSION=2.166.4/' \
         -i Makefile && \
     cp ../page-dashboard.tag app/src/dashboard/page-dashboard.tag && \
     EDITOR=/bin/true dpkg-source -q --commit . fix_build && \

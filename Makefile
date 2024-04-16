@@ -77,7 +77,7 @@ execute:
 	docker run --rm -it --mount type=bind,src=$(CORPORA_DIR),dst=/corpora -e FORCE_RECOMPILE="$(FORCE_RECOMPILE)" \
      -e SERVER_NAME="$(SERVER_NAME)" -e SERVER_ALIAS="$(SERVER_ALIAS)" -e CITATION_LINK="$(CITATION_LINK)" \
      -e HTACCESS="$$HTACCESS" -e HTPASSWD="$$HTPASSWD" -e PRIVATE_KEY="$$PRIVATE_KEY" -e PUBLIC_KEY="$$PUBLIC_KEY" \
-     $(IMAGE_NAME) "$(CMD)"
+     $(IMAGE_NAME) $(CMD)
 .PHONY: execute
 
 

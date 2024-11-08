@@ -11,7 +11,7 @@ See [Dockerfile](Dockerfile) for details.
 
 ## TL;DR
 
-1. `git clone https://github.com/ELTE-DH/NoSketch-Engine-Docker.git`
+1. `git clone --depth=1 https://github.com/ELTE-DH/NoSketch-Engine-Docker.git`
 2. `make pull` – to download the docker image
 3. `make compile` – to compile sample corpora
 4. `make execute` – to execute a Sketch Engine command (`compilecorp`, `corpquery`, etc.) in the docker container

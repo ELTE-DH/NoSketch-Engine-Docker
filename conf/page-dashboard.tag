@@ -167,16 +167,16 @@
         this.isFullAccount = Auth.isFullAccount()
         this.bannerExpanded = true
         this.hideBanner = window.config.HIDE_DASHBOARD_BANNER
-        this.bannerId = 1//Math.ceil(Math.random() * 2)
+        this.bannerId = Math.ceil(Math.random() * 2)
 
         _isBitermsActive(){
             if(!this.corpus
                     || (this.corpus.owner_id === null && !this.corpus.corpname.includes("_oct"))
                     || (!this.corpus.aligned || this.corpus.aligned.length == 0)
-                    || !AppStore.langsWithBiterms.includes(this.corpus.language_name)){
+                    || !AppStore.data.langsWithBiterms.includes(this.corpus.language_name)){
                 return false
             }
-            let compatibleCorpora = AppStore.data.corpusList.filter(c => AppStore.langsWithBiterms.includes(c.language_name))
+            let compatibleCorpora = AppStore.data.corpusList.filter(c => AppStore.data.langsWithBiterms.includes(c.language_name))
                     .map(c => c.corpname.split("/").splice(-1).join("/"))
             return this.corpus.aligned.some(c => compatibleCorpora.includes(c))
         }
@@ -224,7 +224,8 @@
                 }, {
                     page: "trends",
                     id: "trends",
-                    active: p.trends && features.trends
+                    active: p.trends && features.trends,
+                    tooltip: "t_id:d_trends_inactive"
                 }, {
                     page: "text-type-analysis",
                     query: this.corpus ? `?corpname=${this.corpus.corpname}&wlminfreq=1&include_nonwords=1&showresults=1&wlicase=1&wlnums=frq&wlattr=${wlattr}` : "",
@@ -325,10 +326,12 @@
         this.on("mount", () => {
             this._updateUrl()
             AppStore.on("corpusChanged", this.update)
+            AppStore.on("languageListLoaded", this.update)
         })
 
         this.on("unmount", () => {
             AppStore.off("corpusChanged", this.update)
+            AppStore.off("languageListLoaded", this.update)
         })
 
     </script>

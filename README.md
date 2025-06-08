@@ -3,6 +3,11 @@
 This is a [dockerised](https://www.docker.com/) version of [NoSketch Engine](https://nlp.fi.muni.cz/trac/noske),
  the open source version of [Sketch Engine](https://www.sketchengine.eu/) corpus manager and text analysis software
  developed by [Lexical Computing Limited](https://www.lexicalcomputing.com/).
+NoSketch Engine lacks some features compared to Sketch Engine. See [the comparison](https://www.sketchengine.eu/nosketch-engine/) for details.
+
+This repository is completely independent of both Lexical Computing Limited and the NoSketch Engine upstream.
+If you have any questions about the NoSketch Engine, please use the mailing list: https://groups.google.com/a/sketchengine.co.uk/g/noske .
+For questions about the docker image, please use the issue tracker.
 
 This docker image is based on Debian 12 Bookworm and
  [the NoSketch Engine build and installation process](https://nlp.fi.muni.cz/trac/noske#Buildandinstallation) contains
@@ -175,6 +180,8 @@ Two types of authentication is supported: _basic auth_ and _Shibboleth_
 2. [Run or restart the container to apply](#3a-run-the-container) or
     [(re)build your custom image](#1-get-the-docker-image)
 
+Note: All users have the same privileges. Currently, there is no interface to manage users from the web UI.
+
 ### Shibboleth
 
 To be able to use the container as a Shibboleth SP (with eduid.hu)
@@ -220,9 +227,34 @@ Set `CITATION_LINK` e.g. `export CITATION_LINK="https://LINK_GOES_HERE"` or in `
 The link is displayed in the lower-right corner of the main dashboard if [any type of authentication](#authentication)
  is set.
 
+## Sketch Engine API access
+
+Sketch Engine provides an API for accessing features programmatically. The same applies to NoSketch Engine.
+See the detailed documentation at https://www.sketchengine.eu/apidoc/ .
+
+The base URL of the NoSketch Engine API for this container is as follows: `http://****:10070/bonito/run.cgi`
+
+An example API call is as shown below:
+
+Request:
+
+`http://***:10070/bonito/run.cgi/wordlist?corpname=susanne&wlattr=word&wlpat=test.&wlsort=frq&wlmaxitems=2&format=json`
+
+Response:
+
+`{"new_maxitems": 2, "wllimit": 0, "total": 4, "totalfrq": 52, "lastpage": 0, "Items": [{"str": "test", "frq": 26, "relfreq": 172.84246}, {"str": "tested", "frq": 13, "relfreq": 86.42123}], "wlattr_label": "word", "frtp": "frequency", "api_version": "open-5.71.15", "manatee_version": "2.36.7-open-2.225.8", "request": {"wlmaxitems": "2", "wlpat": "test.*", "format": "json", "corpname": "susanne", "wlsort": "frq", "wlattr": "word"}}`
+
 ## Similar projects
 
 - https://hub.docker.com/r/acdhch/noske
+
+## Notable users
+
+- [Leipzig Corpora Collection](https://github.com/Leipzig-Corpora-Collection/NoSketch-Engine-Docker)
+- Goethe University Frankfurt
+- National Library of Latvia
+- Dublin City University
+- [HUN-REN Hungarian Research Centre for Linguistics](https://mnsz2-ud.nytud.hu/)
 
 ## License
 

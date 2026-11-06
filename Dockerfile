@@ -40,18 +40,40 @@ RUN tar -xvf manatee* && \
     debuild -d -us -uc
 
 ### Bonito
+#### HACK2: Add patch to dynamically load corpora registry files
 RUN tar -xvf bonito* && \
     cd bonito* && \
     debmake -b":python3" && \
+    printf '%b\n' \
+    '/^    corplist = \["susanne"\]$/c\\' \
+    '    \# Read corpora list runtime from registry\\' \
+    '    if "MANATEE_REGISTRY" not in os.environ:\\' \
+    '        os.environ["MANATEE_REGISTRY"] = "@MANATEE_REGISTRY@"\\' \
+    '    corplist = [corp_name for corp_name in os.listdir(os.environ["MANATEE_REGISTRY"])]' \
+    ';/^    corpname = "susanne"$/c\\' \
+    '    if len(corplist) > 0:\\' \
+    '        corpname = corplist[0]\\' \
+    '    else:\\' \
+    '        corpname = "susanne"' | \
+    sed -i -f - run.cgi.in && \
     touch AUTHORS ChangeLog NEWS && \
-    echo -e '#!/bin/bash\n#DEBHELPER#\n' > debian/postinst && \
-    echo '/usr/bin/setupbonito /var/www/bonito /var/lib/bonito' >> debian/postinst && \
-    echo 'chown -R www-data:www-data /var/lib/bonito' >> debian/postinst && \
-    echo '# Remove unnecessary files and create symlink for utility command' >> debian/postinst && \
-    echo 'rm -rf /var/www/bonito/.htaccess /tmp/noske_files/*' >> debian/postinst && \
-    echo 'ln -sf /usr/bin/htpasswd /usr/local/bin/htpasswd' >> debian/postinst && \
-    echo '\noverride_dh_usrlocal:\n' >> debian/rules && \
-    chmod +x debian/rules && \
+    EDITOR=/bin/true dpkg-source -q --commit . fix_build && \
+    printf '%s\n' \
+    '#!/bin/bash' \
+    '#DEBHELPER#' \
+    '' \
+    'MANATEE_REGISTRY="/corpora/registry" /usr/bin/setupbonito /var/www/bonito /var/lib/bonito' \
+    'chown -R www-data:www-data /var/lib/bonito' > debian/postinst && \
+    printf '%b\n' \
+    'export DEB_PYTHON_INSTALL_LAYOUT=deb' \
+    'override_dh_auto_install:' \
+    '\tPREFIX=/usr DESTDIR=$(CURDIR)/debian/tmp make install' \
+    'override_dh_missing:' \
+    '\tdh_missing --fail-missing' >> ./debian/rules && \
+    printf '%s\n' \
+    'usr/bin/*' \
+    'usr/lib/python3/dist-packages/bonito/*' \
+    'usr/share/bonito/*' >> debian/bonito-open.install && \
     debuild -d -us -uc
 
 ### GDEX
@@ -96,6 +118,8 @@ COPY --from=build /tmp/noske_files/*.deb /tmp/noske_files/
 ### deb packages
 RUN apt-get update && \
     apt-get install -y \
+        parallel \
+        make \
         apache2 \
         libapache2-mod-shib \
         python3-prctl \
@@ -103,14 +127,13 @@ RUN apt-get update && \
         python3-html2text \
         python3-legacy-cgi \
         /tmp/noske_files/*.deb && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /tmp/noske_files
 
 ## Enable apache CGI and mod_rewrite
 RUN a2enmod cgi rewrite shib
 
 ## Copy config files (These files contain placeholders replaced in entrypoint.sh according to environment variables)
 COPY conf/*.sh /usr/local/bin/
-COPY conf/run.cgi /var/www/bonito/run.cgi
 COPY conf/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY conf/shibboleth2.xml /etc/shibboleth/shibboleth2.xml
 COPY conf/*.crt /etc/shibboleth/
@@ -129,9 +152,7 @@ COPY conf/*.crt /etc/shibboleth/
 RUN ln -s /usr/lib/python3.13/site-packages/manatee.py /usr/lib/python3/dist-packages/manatee.py && \
     ln -s /usr/lib/python3.13/site-packages/_manatee.so /usr/lib/python3/dist-packages/_manatee.so && \
     ln -s /usr/lib/python3.13/site-packages/_manatee.a /usr/lib/python3/dist-packages/_manatee.a && \
-    ln -s /usr/lib/python3.13/site-packages/_manatee.la /usr/lib/python3/dist-packages/_manatee.la && \
-    ln -s /usr/lib/python3/dist-packages/bonito /usr/local/lib/python3.13/dist-packages/bonito && \
-    mkdir /var/lib/bonito && chown -R www-data:www-data /var/lib/bonito
+    ln -s /usr/lib/python3.13/site-packages/_manatee.la /usr/lib/python3/dist-packages/_manatee.la
 
 # Start the container
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "$@"]

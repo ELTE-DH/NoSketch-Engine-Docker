@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If no params then start the server,
-# else run the specified command from /usr/local/bin
+# else run the specified command from /usr/bin
 if [ $# -eq 1 ]; then
     # Shibboleth requires these to be set properly!
     SERVER_NAME=${SERVER_NAME:="https://sketchengine.company.com/"}

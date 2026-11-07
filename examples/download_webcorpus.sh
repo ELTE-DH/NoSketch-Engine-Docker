@@ -1,5 +1,5 @@
 mkdir -p webcorpus_orig
-pushd webcorpus_orig
+pushd webcorpus_orig || exit 1
 wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/2017_2018_0001.tsv.gz
 wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/2017_2018_0002.tsv.gz
 wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/2017_2018_0003.tsv.gz
@@ -4467,4 +4467,4 @@ wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/wiki_0167.tsv.gz
 wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/wiki_0168.tsv.gz
 wget https://nessie.ilab.sztaki.hu/~ndavid/Webcorpus2_clean/sha256sums
 sha256sum -c sha256sums
-popd
+popd || exit 1

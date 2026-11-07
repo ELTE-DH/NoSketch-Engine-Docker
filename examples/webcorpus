@@ -6,11 +6,15 @@ ENCODING "UTF-8"
 LANGUAGE "Hungarian"
 
 PATH "/corpora/webcorpus/indexed/"
-# Do not use * globbing to stabilise the ordering of files
-VERTICAL "| zcat /corpora/webcorpus/vertical/ske_2017_2018_{0001..3697}.tsv.gz /corpora/webcorpus/vertical/ske_2019_{0001..0600}.tsv.gz /corpora/webcorpus/vertical/ske_wiki_{0001..0168}.tsv.gz"
+
+# Stabilise the ordering of files
+VERTICAL "| LC_ALL=C gzip -cd /corpora/webcorpus/vertical/ske_*.tsv.gz"
 
 INFOHREF "https://hlt.bme.hu/hu/resources/webcorpus2"
 TAGSETDOC "https://e-magyar.hu/hu/textmodules/emmorph_codelist"
+
+# Display structural attributes before concordance lines
+SHORTREF "=doc.id,=p.id,=s.id"
 
 ATTRIBUTE word {
     TYPE "FD_FGD"
@@ -21,6 +25,22 @@ ATTRIBUTE lemma {
 }
 
 ATTRIBUTE tag {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE np {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE deep {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE surface {
+    TYPE "FD_FGD"
+}
+
+ATTRIBUTE morphtags {
     TYPE "FD_FGD"
 }
 
@@ -56,11 +76,12 @@ STRUCTURE doc {
 
 STRUCTURE p {
     ATTRIBUTE "id"
-    TYPE "file64"
+    TYPE      "file64"
 }
 
 STRUCTURE s {
-    TYPE "file64"
+    ATTRIBUTE "id"
+    TYPE      "file64"
 }
 
 STRUCTURE g {
